@@ -1,0 +1,1766 @@
+<title>SpearX Platform Tour</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a dark console product tour. Full-width copy bands alternate with framed
+   product "shots" - each shot is a mock app window (icon rail + app bar + panel grid).
+   Blue = SpearX platform surface. Teal = SpearAI agent layer. Severity ramp is separate. */
+:root{
+  color-scheme: dark;
+
+  /* color */
+  --ink:#070B11; --ink-2:#0B1018;
+  --surface:#0F1621; --surface-2:#141E2B; --surface-3:#1C2836;
+  --line:#1F2C3B; --line-2:#2B3C4F;
+  --fg:#E9F0F8; --fg-2:#A4B6CA; --muted:#6E8197;
+  --brand:#5B8CFF; --ai:#19E0C2;
+  --crit:#FF4D5E; --high:#FF8C3F; --med:#F3C544; --low:#56A9FF; --ok:#36D399;
+
+  /* type */
+  --display:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --r:11px; --rs:6px; --maxw:1260px;
+}
+*{box-sizing:border-box}
+body{background:var(--ink);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- page type ---------- */
+h1,h2,h3,h4{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em;line-height:1.08}
+h1{font-size:clamp(34px,6.4vw,66px);font-weight:900}
+h2{font-size:clamp(25px,3.5vw,42px);font-weight:800}
+h3{font-size:clamp(19px,2.1vw,25px);font-weight:700;letter-spacing:-.015em}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);display:flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;flex:0 0 22px}
+.eyebrow.ai{color:var(--ai)}
+.lede{color:var(--fg-2);font-size:clamp(15px,1.5vw,18.5px);max-width:62ch}
+.sm{color:var(--muted);font-size:13.5px}
+
+/* ---------- top nav ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:color-mix(in srgb,var(--ink) 86%,transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:18px;padding-block:11px}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:800;font-size:16.5px;letter-spacing:-.025em;color:var(--fg);white-space:nowrap}
+.mark .glyph{width:26px;height:26px;flex:0 0 26px;border-radius:7px;background:linear-gradient(145deg,var(--brand),var(--ai));display:grid;place-items:center}
+.mark .glyph svg{width:15px;height:15px;display:block}
+.nav-links{display:flex;gap:17px;margin-left:auto;font-size:13px;color:var(--fg-2);overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--fg-2);white-space:nowrap}
+.nav-links a:hover{color:var(--fg)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:13.5px;font-weight:600;
+  padding:9px 16px;border-radius:8px;border:1px solid var(--line-2);color:var(--fg);background:var(--surface-2);white-space:nowrap;cursor:pointer}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#061024}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.lg{font-size:15px;padding:12px 22px}
+
+/* ---------- bands ---------- */
+.band{padding-block:clamp(46px,6.5vw,92px);position:relative}
+.band.alt{background:var(--ink-2);border-block:1px solid var(--line)}
+.hero{padding-top:clamp(40px,5.5vw,76px);padding-bottom:clamp(30px,4vw,54px);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(900px 420px at 16% -8%,rgba(91,140,255,.17),transparent 62%),
+             radial-gradient(760px 380px at 86% 4%,rgba(25,224,194,.11),transparent 60%)}
+.hero-in{position:relative;z-index:1;display:grid;gap:22px}
+.hero h1{max-width:19ch}
+.hero .lede{max-width:56ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:11px;align-items:center}
+.proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:6px}
+.proof div{background:var(--ink);padding:14px 16px}
+.proof b{display:block;font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--fg);letter-spacing:-.01em}
+.proof span{font-size:12.5px;color:var(--muted)}
+
+/* module copy block above each shot */
+.mod{display:grid;gap:14px;margin-bottom:20px}
+.mod .row{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(18px,3vw,46px);align-items:end}
+.feat{display:grid;gap:9px;margin:0;padding:0;list-style:none}
+.feat li{display:grid;grid-template-columns:16px 1fr;gap:10px;font-size:14px;color:var(--fg-2);align-items:start}
+.feat li::before{content:"";width:7px;height:7px;margin-top:7px;border-radius:2px;background:var(--brand);transform:rotate(45deg)}
+.feat.ai li::before{background:var(--ai)}
+
+/* ---------- shot frame ---------- */
+.shot{margin:0;display:grid;gap:11px}
+.win{border:1px solid var(--line-2);border-radius:13px;overflow:hidden;background:var(--surface);
+  box-shadow:0 34px 90px -34px rgba(0,0,0,.95),0 2px 0 0 rgba(255,255,255,.03) inset}
+.win-bar{display:flex;align-items:center;gap:11px;padding:9px 13px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:5px;flex:0 0 auto}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line-2);display:block}
+.win-url{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--ink-2);border:1px solid var(--line);
+  border-radius:6px;padding:4px 10px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.demo-chip{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--med);
+  border:1px solid color-mix(in srgb,var(--med) 36%,transparent);background:color-mix(in srgb,var(--med) 11%,transparent);
+  border-radius:999px;padding:3px 9px;white-space:nowrap;flex:0 0 auto}
+.shot figcaption{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+
+/* ---------- mock app chrome ---------- */
+.app{display:flex;background:var(--ink-2)}
+.rail{width:54px;flex:0 0 54px;border-right:1px solid var(--line);background:var(--surface);
+  padding:11px 0;display:flex;flex-direction:column;align-items:center;gap:5px}
+.rail .lg2{width:28px;height:28px;border-radius:8px;background:linear-gradient(145deg,var(--brand),var(--ai));
+  display:grid;place-items:center;margin-bottom:7px;flex:0 0 28px}
+.rail .lg2 svg{width:16px;height:16px;display:block}
+.rail b{width:32px;height:28px;border-radius:7px;display:grid;place-items:center;font-family:var(--mono);font-size:9.5px;
+  font-weight:600;color:var(--muted);border:1px solid transparent;flex:0 0 28px}
+.rail b.on{background:var(--surface-3);color:var(--brand);border-color:var(--line-2)}
+.rail b.on-ai{background:color-mix(in srgb,var(--ai) 14%,var(--surface-3));color:var(--ai);border-color:color-mix(in srgb,var(--ai) 34%,transparent)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.appbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.appbar h4{font-size:13.5px;font-weight:700;letter-spacing:-.01em}
+.crumb{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em}
+.appbar .sp{flex:1;min-width:14px}
+.fakesearch{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:var(--ink-2);border:1px solid var(--line);
+  border-radius:6px;padding:4px 10px;max-width:260px;flex:1 1 120px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:3px;padding:0 14px;border-bottom:1px solid var(--line);background:var(--surface);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs span{font-size:11.5px;color:var(--muted);padding:8px 11px;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs span.on{color:var(--fg);border-bottom-color:var(--brand)}
+.pane{padding:13px;display:grid;gap:11px;min-width:0}
+.pill{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;border:1px solid var(--line-2);color:var(--fg-2);white-space:nowrap}
+.pill.live{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 38%,transparent);background:color-mix(in srgb,var(--ok) 11%,transparent)}
+.pill.ai{color:var(--ai);border-color:color-mix(in srgb,var(--ai) 38%,transparent);background:color-mix(in srgb,var(--ai) 11%,transparent)}
+.ava{width:24px;height:24px;border-radius:50%;background:var(--surface-3);border:1px solid var(--line-2);
+  display:grid;place-items:center;font-family:var(--mono);font-size:9.5px;color:var(--fg-2);flex:0 0 24px}
+
+/* ---------- panels + kit ---------- */
+.p{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);min-width:0;overflow:hidden}
+.p-h{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.p-t{font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--fg-2)}
+.p-b{padding:12px;min-width:0}
+.g2,.g3,.g4,.g5{display:grid;gap:11px;min-width:0}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.split{display:grid;gap:11px;grid-template-columns:minmax(0,1fr) minmax(0,.46fr);min-width:0}
+.split.wide{grid-template-columns:minmax(0,1fr) minmax(0,.3fr)}
+
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;display:grid;gap:4px;min-width:0}
+.kpi .l{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .n{font-family:var(--display);font-size:clamp(19px,2.3vw,25px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.kpi .d{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.up{color:var(--crit)} .dn{color:var(--ok)}
+.n.c{color:var(--crit)} .n.h{color:var(--high)} .n.m{color:var(--med)} .n.o{color:var(--ok)} .n.b{color:var(--brand)} .n.a{color:var(--ai)}
+
+.sev{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 6px;border-radius:4px;border:1px solid var(--line-2);color:var(--fg-2);white-space:nowrap}
+.sev.c{color:var(--crit);border-color:color-mix(in srgb,var(--crit) 42%,transparent);background:color-mix(in srgb,var(--crit) 13%,transparent)}
+.sev.h{color:var(--high);border-color:color-mix(in srgb,var(--high) 42%,transparent);background:color-mix(in srgb,var(--high) 13%,transparent)}
+.sev.m{color:var(--med);border-color:color-mix(in srgb,var(--med) 42%,transparent);background:color-mix(in srgb,var(--med) 13%,transparent)}
+.sev.l{color:var(--low);border-color:color-mix(in srgb,var(--low) 42%,transparent);background:color-mix(in srgb,var(--low) 13%,transparent)}
+.sev.o{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 42%,transparent);background:color-mix(in srgb,var(--ok) 13%,transparent)}
+
+.tbl-wrap{overflow-x:auto;min-width:0}
+table.tbl{width:100%;border-collapse:collapse;min-width:560px}
+.tbl th{text-align:left;font-family:var(--body);font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:8px 11px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+.tbl td{padding:8px 11px;border-bottom:1px solid color-mix(in srgb,var(--line) 62%,transparent);
+  font-family:var(--mono);font-size:11px;color:var(--fg-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl td.k{color:var(--fg);font-weight:500}
+.tbl th.num,.tbl td.num{text-align:right}
+
+.bar{height:5px;border-radius:999px;background:var(--surface-3);overflow:hidden;min-width:54px;display:block}
+.bar>span{display:block;height:100%;border-radius:999px;background:var(--brand)}
+.bar>span.ok{background:var(--ok)} .bar>span.med{background:var(--med)}
+.bar>span.crit{background:var(--crit)} .bar>span.high{background:var(--high)} .bar>span.ai{background:var(--ai)}
+.barcell{display:flex;align-items:center;gap:8px;min-width:120px}
+.barcell em{font-family:var(--mono);font-style:normal;font-size:10.5px;color:var(--fg-2);min-width:34px;text-align:right}
+
+.rows{display:grid;gap:9px;min-width:0}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;min-width:0}
+.row2 .t{font-size:12px;color:var(--fg);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row2 .s{font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap}
+.mono{font-family:var(--mono)}
+.tiny{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:.03em}
+.legend{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.legend span{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.legend i{width:9px;height:9px;border-radius:2px;display:block;border:1px solid var(--line-2)}
+svg.chart{display:block;width:100%;height:auto;max-width:100%}
+
+/* ---------- responsive ---------- */
+@media (max-width:1040px){
+  .g5{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .split,.split.wide{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:860px){
+  .mod .row{grid-template-columns:minmax(0,1fr);align-items:start}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .proof{grid-template-columns:minmax(0,1fr)}
+  .g2,.g3,.g4,.g5{grid-template-columns:minmax(0,1fr)}
+  .rail{width:44px;flex:0 0 44px}
+  .rail b{width:28px}
+  .pane{padding:10px;gap:9px}
+  .nav-links{display:none}
+  .win-url{font-size:10px}
+}
+</style>
+<style>
+/* diagram layer - shared by the agent canvas and the investigation canvas */
+.dgm{overflow-x:auto;min-width:0}
+svg.flow{display:block;width:100%;height:auto;min-width:860px}
+.flow .src{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.flow .svc{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1}
+.flow .agt{fill:color-mix(in srgb,var(--ai) 9%,var(--surface-2));stroke:color-mix(in srgb,var(--ai) 44%,transparent);stroke-width:1.3}
+.flow .store{fill:color-mix(in srgb,var(--brand) 9%,var(--surface-2));stroke:color-mix(in srgb,var(--brand) 42%,transparent);stroke-width:1.3}
+.flow .gate{fill:color-mix(in srgb,var(--med) 10%,var(--surface-2));stroke:color-mix(in srgb,var(--med) 48%,transparent);stroke-width:1.3}
+.flow .out{fill:var(--surface);stroke:var(--line-2);stroke-width:1}
+.flow .nt{fill:var(--fg);font-family:var(--display);font-size:14px;font-weight:700}
+.flow .ns{fill:var(--fg-2);font-family:var(--body);font-size:11px}
+.flow .nm{fill:var(--muted);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em}
+.flow .ne{fill:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.02em}
+.flow .tag{fill:var(--ai);font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em}
+.flow .tagb{fill:var(--brand);font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em}
+.flow .ed{stroke:var(--line-2);stroke-width:1.4;fill:none}
+.flow .ed-ai{stroke:color-mix(in srgb,var(--ai) 62%,transparent);stroke-width:1.7;fill:none}
+.flow .ed-ev{stroke:color-mix(in srgb,var(--brand) 50%,transparent);stroke-width:1.2;fill:none;stroke-dasharray:4 4}
+.flow .ok{fill:var(--ok);font-family:var(--mono);font-size:9.5px;font-weight:600}
+</style>
+
+<nav class="nav"><div class="wrap nav-in">
+  <span class="mark"><span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/><path d="M12 7 L15.5 10.5 L12 17 L8.5 10.5 Z" fill="#9fd8ff"/></svg></span>SpearX</span>
+  <span class="nav-links">
+    <a href="#agents">Agent canvas</a>
+    <a href="#intel">Threat intel</a>
+    <a href="#risk">Entity risk</a>
+    <a href="#mitre">ATT&amp;CK</a>
+    <a href="#canvas">Analysis</a>
+    <a href="#vuln">Vulnerabilities</a>
+    <a href="#cspm">CSPM</a>
+    <a href="#fim">FIM</a>
+    <a href="#cqs">CQS</a>
+    <a href="#dash">Dashboards</a>
+    <a href="#reports">Reports</a>
+  </span>
+  <a class="btn pri" href="#demo">Book a walkthrough</a>
+</div></nav>
+
+<header class="hero"><div class="wrap hero-in">
+  <p class="eyebrow">SpearX platform &nbsp;·&nbsp; powered by SpearAI</p>
+  <h1>One platform. A team of AI agents. Every alert answered.</h1>
+  <p class="lede">SpearX puts detection, threat intelligence, vulnerabilities, cloud posture and file integrity on a single data model. SpearAI puts a team of specialist agents on top of it, so a signal arrives already triaged, enriched and explained, with the evidence attached and a human in control of anything that changes state.</p>
+  <div class="cta-row">
+    <a class="btn pri lg" href="#demo">Book a walkthrough</a>
+    <a class="btn lg" href="#agents">See the agent canvas</a>
+  </div>
+  <div class="proof">
+    <div><b>One data model</b><span>Endpoint, cloud, identity and intel joined once, queried everywhere.</span></div>
+    <div><b>Agents you can watch</b><span>Every step, input and output of a run is on the canvas and in the log.</span></div>
+    <div><b>Evidence on every verdict</b><span>No conclusion without the artefacts that produced it.</span></div>
+  </div>
+</div></header>
+
+<!-- ============ 1. AGENT CANVAS ============ -->
+<section class="band alt" id="agents"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow ai">SpearAI &nbsp;·&nbsp; agent canvas</p>
+    <div class="row">
+      <h2>Your analysts get a team, not a chat box.</h2>
+      <p class="lede">Specialist agents hand work to each other on a canvas you can watch, pause and take over. They share one evidence store, so nothing is asked twice, and nothing that changes your estate happens without an analyst approving it.</p>
+    </div>
+    <ul class="feat ai g3" style="gap:11px 28px">
+      <li>Triage, enrichment, correlation, hunt and response each run as their own agent with its own tools and limits.</li>
+      <li>Every step is recorded with its inputs, outputs, tool calls and cost, so a run can be replayed and audited.</li>
+      <li>Containment waits at an approval gate. The agent proposes, a named analyst decides.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/spearai/canvas/run-8821</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b class="on-ai">AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>Agent canvas</h4>
+            <span class="crumb">RUN-8821 · Credential theft → lateral movement</span>
+            <span class="sp"></span>
+            <span class="pill live">● Running · step 7 of 9</span>
+            <span class="pill ai">SpearAI</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Canvas</span><span>Run log</span><span>Evidence (41)</span><span>Approvals (1)</span><span>Cost</span><span>Replay</span></div>
+          <div class="pane">
+            <div class="p">
+              <div class="p-h"><span class="p-t">Orchestration graph · playbook “Identity compromise”</span>
+                <span class="legend"><span><i style="background:color-mix(in srgb,var(--ai) 22%,var(--surface-2));border-color:color-mix(in srgb,var(--ai) 44%,transparent)"></i>SpearAI agent</span><span><i style="background:color-mix(in srgb,var(--brand) 22%,var(--surface-2));border-color:color-mix(in srgb,var(--brand) 42%,transparent)"></i>Shared store</span><span><i style="background:color-mix(in srgb,var(--med) 22%,var(--surface-2));border-color:color-mix(in srgb,var(--med) 48%,transparent)"></i>Human gate</span></span>
+              </div>
+              <div class="p-b dgm">
+                <svg class="flow" viewBox="0 0 1180 420" role="img" aria-label="Telemetry is normalized, then passed along a chain of SpearAI agents - triage, enrichment, correlation and hunt - which all read and write one shared evidence store; the response agent's proposed containment action stops at an analyst approval gate before execution, while the report is generated straight from the evidence.">
+                  <defs>
+                    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2B3C4F"/></marker>
+                    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#19E0C2"/></marker>
+                    <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5B8CFF"/></marker>
+                  </defs>
+
+                  <!-- sources -->
+                  <rect class="src" x="12" y="30" width="126" height="34" rx="6"/>
+                  <text class="ns" x="26" y="51">EDR · 14 400 hosts</text>
+                  <rect class="src" x="12" y="72" width="126" height="34" rx="6"/>
+                  <text class="ns" x="26" y="93">SIEM + syslog</text>
+                  <rect class="src" x="12" y="114" width="126" height="34" rx="6"/>
+                  <text class="ns" x="26" y="135">Cloud audit logs</text>
+                  <rect class="src" x="12" y="156" width="126" height="34" rx="6"/>
+                  <text class="ns" x="26" y="177">Identity · Entra ID</text>
+                  <rect class="src" x="12" y="198" width="126" height="34" rx="6"/>
+                  <text class="ns" x="26" y="219">Threat intel feeds</text>
+
+                  <!-- ingest -->
+                  <rect class="svc" x="152" y="30" width="86" height="202" rx="7"/>
+                  <text class="nm" x="195" y="118" text-anchor="middle">NORMALIZE</text>
+                  <text class="nm" x="195" y="133" text-anchor="middle">DEDUPE</text>
+                  <text class="nm" x="195" y="148" text-anchor="middle">RESOLVE</text>
+
+                  <line class="ed" x1="138" y1="47" x2="150" y2="110" marker-end="url(#a1)"/>
+                  <line class="ed" x1="138" y1="89" x2="150" y2="116" marker-end="url(#a1)"/>
+                  <line class="ed" x1="138" y1="131" x2="150" y2="131" marker-end="url(#a1)"/>
+                  <line class="ed" x1="138" y1="173" x2="150" y2="146" marker-end="url(#a1)"/>
+                  <line class="ed" x1="138" y1="215" x2="150" y2="152" marker-end="url(#a1)"/>
+
+                  <!-- agent row -->
+                  <text class="ne" x="256" y="22" text-anchor="middle">events</text>
+                  <line class="ed-ai" x1="238" y1="131" x2="266" y2="131" marker-end="url(#a2)"/>
+
+                  <rect class="agt" x="268" y="92" width="164" height="90" rx="8"/>
+                  <text class="tag" x="282" y="111">AGENT 01</text>
+                  <text class="nt" x="282" y="132">Triage</text>
+                  <text class="ns" x="282" y="150">Scores, dedupes, drops</text>
+                  <text class="ns" x="282" y="165">the noise</text>
+                  <text class="ok" x="282" y="177">✓ done · 2.1s</text>
+
+                  <text class="ne" x="458" y="84" text-anchor="middle">scored alert</text>
+                  <line class="ed-ai" x1="432" y1="137" x2="482" y2="137" marker-end="url(#a2)"/>
+
+                  <rect class="agt" x="484" y="92" width="164" height="90" rx="8"/>
+                  <text class="tag" x="498" y="111">AGENT 02</text>
+                  <text class="nt" x="498" y="132">Enrichment</text>
+                  <text class="ns" x="498" y="150">Intel, asset owner,</text>
+                  <text class="ns" x="498" y="165">identity, exposure</text>
+                  <text class="ok" x="498" y="177">✓ done · 6.4s</text>
+
+                  <text class="ne" x="674" y="84" text-anchor="middle">+ context</text>
+                  <line class="ed-ai" x1="648" y1="137" x2="698" y2="137" marker-end="url(#a2)"/>
+
+                  <rect class="agt" x="700" y="92" width="164" height="90" rx="8"/>
+                  <text class="tag" x="714" y="111">AGENT 03</text>
+                  <text class="nt" x="714" y="132">Correlation</text>
+                  <text class="ns" x="714" y="150">Joins 23 alerts into</text>
+                  <text class="ns" x="714" y="165">one incident</text>
+                  <text class="ok" x="714" y="177">✓ done · 11.8s</text>
+
+                  <text class="ne" x="890" y="84" text-anchor="middle">incident</text>
+                  <line class="ed-ai" x1="864" y1="137" x2="914" y2="137" marker-end="url(#a2)"/>
+
+                  <rect class="agt" x="916" y="92" width="164" height="90" rx="8"/>
+                  <text class="tag" x="930" y="111">AGENT 04</text>
+                  <text class="nt" x="930" y="132">Hunt</text>
+                  <text class="ns" x="930" y="150">Tests 4 hypotheses</text>
+                  <text class="ns" x="930" y="165">across 90 days</text>
+                  <text class="tagb" x="930" y="177">● RUNNING · 3/4</text>
+
+                  <!-- shared evidence store -->
+                  <line class="ed-ev" x1="350" y1="182" x2="350" y2="234" marker-end="url(#a3)" marker-start="url(#a3)"/>
+                  <line class="ed-ev" x1="566" y1="182" x2="566" y2="234" marker-end="url(#a3)" marker-start="url(#a3)"/>
+                  <line class="ed-ev" x1="782" y1="182" x2="782" y2="234" marker-end="url(#a3)" marker-start="url(#a3)"/>
+                  <line class="ed-ev" x1="998" y1="182" x2="998" y2="234" marker-end="url(#a3)" marker-start="url(#a3)"/>
+                  <text class="ne" x="640" y="202" text-anchor="middle">read / write evidence</text>
+
+                  <rect class="store" x="268" y="236" width="812" height="52" rx="8"/>
+                  <text class="tagb" x="284" y="256">SHARED EVIDENCE STORE</text>
+                  <text class="ns" x="284" y="275">41 artefacts · 23 alerts · 6 entities · 4 hypotheses · one timeline every agent writes to</text>
+
+                  <!-- outputs row -->
+                  <line class="ed-ev" x1="350" y1="288" x2="350" y2="322" marker-end="url(#a3)"/>
+                  <text class="ne" x="394" y="308">case</text>
+                  <rect class="agt" x="268" y="324" width="184" height="62" rx="8"/>
+                  <text class="tag" x="282" y="342">AGENT 05</text>
+                  <text class="nt" x="282" y="362">Response</text>
+                  <text class="ns" x="282" y="378">Proposes, never executes</text>
+
+                  <text class="ne" x="476" y="347" text-anchor="middle">plan</text>
+                  <line class="ed" x1="452" y1="355" x2="498" y2="355" marker-end="url(#a1)"/>
+
+                  <rect class="gate" x="500" y="324" width="156" height="62" rx="8"/>
+                  <text class="nm" x="578" y="345" text-anchor="middle" style="fill:var(--med)">HUMAN GATE</text>
+                  <text class="ns" x="578" y="363" text-anchor="middle">Analyst approval</text>
+                  <text class="nm" x="578" y="378" text-anchor="middle">M. KHOURY · PENDING</text>
+
+                  <text class="ne" x="676" y="347" text-anchor="middle">approved</text>
+                  <line class="ed" x1="656" y1="355" x2="702" y2="355" marker-end="url(#a1)"/>
+
+                  <rect class="out" x="704" y="324" width="176" height="62" rx="8"/>
+                  <text class="nt" x="718" y="348">Containment</text>
+                  <text class="ns" x="718" y="366">Isolate host · revoke</text>
+                  <text class="ns" x="718" y="380">session · block hash</text>
+
+                  <line class="ed-ev" x1="1004" y1="288" x2="1004" y2="322" marker-end="url(#a3)"/>
+                  <text class="ne" x="1048" y="308">evidence</text>
+                  <rect class="out" x="928" y="324" width="152" height="62" rx="8"/>
+                  <text class="nt" x="942" y="348">Report</text>
+                  <text class="ns" x="942" y="366">Written from the</text>
+                  <text class="ns" x="942" y="380">evidence store</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="g3">
+              <div class="p"><div class="p-h"><span class="p-t">Run log · agent handoffs</span><span class="tiny">RUN-8821</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">triage</span> → dropped 212 duplicate alerts</span><span class="s">09:14:02</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">triage</span> → escalated 1 alert, score 86</span><span class="s">09:14:04</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">enrich</span> → matched IOC feed “Hydra Panel”</span><span class="s">09:14:11</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">enrich</span> → asset owner = Finance, tier 1</span><span class="s">09:14:13</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">correlate</span> → joined 23 alerts, 6 entities</span><span class="s">09:14:26</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">correlate</span> → mapped T1078 → T1021.002</span><span class="s">09:14:29</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--ai)">hunt</span> → 90-day sweep, 2 more hosts</span><span class="s">09:14:48</span></div>
+                  <div class="row2"><span class="t"><span class="mono" style="color:var(--med)">gate</span> → awaiting approval: isolate 3 hosts</span><span class="s">09:15:02</span></div>
+                </div>
+              </div>
+
+              <div class="p"><div class="p-h"><span class="p-t">Agents on this run</span><span class="tiny">5 ACTIVE</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Triage</span><span class="sev o">done</span></div>
+                  <div class="row2"><span class="t">Enrichment</span><span class="sev o">done</span></div>
+                  <div class="row2"><span class="t">Correlation</span><span class="sev o">done</span></div>
+                  <div class="row2"><span class="t">Hunt</span><span class="sev l">running</span></div>
+                  <div class="row2"><span class="t">Response</span><span class="sev m">gated</span></div>
+                  <div class="row2" style="border-top:1px solid var(--line);padding-top:9px"><span class="t">Tool calls</span><span class="s">148</span></div>
+                  <div class="row2"><span class="t">Human decisions required</span><span class="s">1</span></div>
+                  <div class="row2"><span class="t">Run cost</span><span class="s">$0.41</span></div>
+                </div>
+              </div>
+
+              <div class="p"><div class="p-h"><span class="p-t">Approval queue</span><span class="sev m">1 pending</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Isolate <span class="mono">fin-ws-0417</span></span><span class="sev c">critical</span></div>
+                  <div class="row2"><span class="t">Isolate <span class="mono">fin-ws-0392</span></span><span class="sev c">critical</span></div>
+                  <div class="row2"><span class="t">Revoke sessions · <span class="mono">a.saleh</span></span><span class="sev h">high</span></div>
+                  <div class="row2"><span class="t">Block hash <span class="mono">4f1c…9ab2</span></span><span class="sev h">high</span></div>
+                  <div class="row2"><span class="t">Reason</span><span class="s">T1021.002 confirmed</span></div>
+                  <div class="p-b" style="padding:11px 0 0;display:flex;gap:8px"><span class="btn pri" style="font-size:12px;padding:7px 14px">Approve all</span><span class="btn" style="font-size:12px;padding:7px 14px">Open case</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>SpearAI agent canvas — agents hand off left to right, share one evidence store, and stop at a human gate before anything is contained.</figcaption>
+  </figure>
+</div></section>
+<style>
+.spk{width:62px;height:18px;display:block;flex:0 0 62px}
+.spk polyline{fill:none;stroke:var(--brand);stroke-width:1.6;stroke-linejoin:round}
+.spk.up polyline{stroke:var(--crit)} .spk.dn polyline{stroke:var(--ok)} .spk.a polyline{stroke:var(--ai)}
+.mitre{display:grid;grid-template-columns:repeat(12,minmax(94px,1fr));gap:5px;min-width:1160px}
+.mcol{display:grid;gap:4px;align-content:start;min-width:0}
+.mh{font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  padding-bottom:5px;border-bottom:1px solid var(--line);min-height:30px;line-height:1.25}
+.cl{font-family:var(--mono);font-size:8.5px;line-height:1.3;padding:5px 6px;border-radius:4px;
+  border:1px solid var(--line);background:var(--surface-2);color:var(--fg-2);overflow:hidden}
+.cl b{display:block;font-weight:600;font-size:9px;color:var(--fg);letter-spacing:.02em}
+.cl.f{background:color-mix(in srgb,var(--ok) 24%,var(--surface-2));border-color:color-mix(in srgb,var(--ok) 46%,transparent)}
+.cl.p{background:color-mix(in srgb,var(--med) 22%,var(--surface-2));border-color:color-mix(in srgb,var(--med) 44%,transparent)}
+.cl.n{background:color-mix(in srgb,var(--crit) 18%,var(--surface-2));border-color:color-mix(in srgb,var(--crit) 40%,transparent)}
+.gauge{display:flex;align-items:center;gap:13px}
+.gauge svg{width:92px;height:92px;flex:0 0 92px;display:block}
+.gauge .trk{fill:none;stroke:var(--surface-3);stroke-width:9}
+.gauge .val{fill:none;stroke:var(--brand);stroke-width:9;stroke-linecap:round}
+.gauge .val.ok{stroke:var(--ok)} .gauge .val.med{stroke:var(--med)} .gauge .val.crit{stroke:var(--crit)}
+.gauge .gt{fill:var(--fg);font-family:var(--display);font-size:22px;font-weight:800;text-anchor:middle}
+.gauge .gs{fill:var(--muted);font-family:var(--mono);font-size:7.5px;text-anchor:middle;letter-spacing:.1em}
+</style>
+
+<!-- ============ 2. THREAT INTELLIGENCE ============ -->
+<section class="band" id="intel"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">Threat intelligence</p>
+    <div class="row">
+      <h2>Intelligence that lands on your assets, not in a PDF.</h2>
+      <p class="lede">Feeds are normalised, deduplicated and confidence-scored, then matched continuously against your own telemetry. You see which indicators actually touched your estate, on which host, at what time, and what the agents did about it.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Actor and campaign tracking mapped to ATT&amp;CK techniques, so intel arrives as detection logic rather than reading material.</li>
+      <li>Confidence and decay scoring retires stale indicators instead of letting them generate noise forever.</li>
+      <li>Retro-hunt sweeps every new indicator back across your history the moment it lands.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/threat-intel/indicators</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b class="on">TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>Threat intelligence</h4>
+            <span class="crumb">INDICATORS · LAST 7 DAYS</span>
+            <span class="sp"></span>
+            <span class="fakesearch">type:ip AND confidence:&gt;80 AND seen_in_estate:true</span>
+            <span class="pill live">● 11 feeds healthy</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Indicators</span><span>Actors</span><span>Campaigns</span><span>Feeds</span><span>Retro-hunt</span><span>TTP overlap</span></div>
+          <div class="pane">
+            <div class="g4">
+              <div class="kpi"><span class="l">Indicators tracked</span><span class="n b">1.84M</span><span class="d">+41 203 this week</span></div>
+              <div class="kpi"><span class="l">Matched in estate</span><span class="n c">37</span><span class="d up">▲ 12 vs last week</span></div>
+              <div class="kpi"><span class="l">Active campaigns</span><span class="n h">6</span><span class="d">2 targeting your sector</span></div>
+              <div class="kpi"><span class="l">Stale, auto-retired</span><span class="n o">8 942</span><span class="d">decay policy 90d</span></div>
+            </div>
+
+            <div class="split">
+              <div class="p">
+                <div class="p-h"><span class="p-t">Indicators seen in your estate</span><span class="tiny">37 MATCHES · SORTED BY IMPACT</span></div>
+                <div class="tbl-wrap"><table class="tbl">
+                  <thead><tr><th>Indicator</th><th>Type</th><th>Actor / campaign</th><th>ATT&amp;CK</th><th class="num">Conf.</th><th>Hits</th><th>First seen</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td class="k">203.0.113.47</td><td>ipv4</td><td>Hydra Panel</td><td>T1071.001</td><td class="num">96</td><td>14</td><td>09:14 today</td><td><span class="sev c">blocked</span></td></tr>
+                    <tr><td class="k">4f1c9e…b2a7</td><td>sha256</td><td>Hydra Panel</td><td>T1055</td><td class="num">94</td><td>3</td><td>09:14 today</td><td><span class="sev c">quarantined</span></td></tr>
+                    <tr><td class="k">cdn-sync.example</td><td>domain</td><td>Silent Ferry</td><td>T1102</td><td class="num">91</td><td>62</td><td>2d ago</td><td><span class="sev h">watch</span></td></tr>
+                    <tr><td class="k">198.51.100.8</td><td>ipv4</td><td>Silent Ferry</td><td>T1105</td><td class="num">88</td><td>9</td><td>2d ago</td><td><span class="sev h">blocked</span></td></tr>
+                    <tr><td class="k">a3e7b1…4c19</td><td>sha1</td><td>Pale Lantern</td><td>T1204.002</td><td class="num">84</td><td>1</td><td>4d ago</td><td><span class="sev m">triaged</span></td></tr>
+                    <tr><td class="k">mail-relay.example</td><td>domain</td><td>Pale Lantern</td><td>T1566.002</td><td class="num">82</td><td>27</td><td>4d ago</td><td><span class="sev m">watch</span></td></tr>
+                    <tr><td class="k">192.0.2.219</td><td>ipv4</td><td>Dusk Adder</td><td>T1572</td><td class="num">79</td><td>4</td><td>6d ago</td><td><span class="sev l">monitored</span></td></tr>
+                    <tr><td class="k">svc-update.example</td><td>domain</td><td>unattributed</td><td>T1071</td><td class="num">71</td><td>18</td><td>6d ago</td><td><span class="sev l">monitored</span></td></tr>
+                  </tbody>
+                </table></div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">Actors tracked against you</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Hydra Panel</span><span class="barcell"><span class="bar"><span class="crit" style="width:92%"></span></span><em>92</em></span></div>
+                    <div class="row2"><span class="t">Silent Ferry</span><span class="barcell"><span class="bar"><span class="high" style="width:74%"></span></span><em>74</em></span></div>
+                    <div class="row2"><span class="t">Pale Lantern</span><span class="barcell"><span class="bar"><span class="med" style="width:58%"></span></span><em>58</em></span></div>
+                    <div class="row2"><span class="t">Dusk Adder</span><span class="barcell"><span class="bar"><span style="width:41%"></span></span><em>41</em></span></div>
+                    <div class="row2"><span class="t">Cobalt Wren</span><span class="barcell"><span class="bar"><span style="width:23%"></span></span><em>23</em></span></div>
+                    <p class="tiny" style="margin-top:3px">RELEVANCE = SECTOR + GEO + TTP OVERLAP WITH YOUR COVERAGE</p>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Feed health</span><span class="pill live">11 / 11</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Commercial feed A</span><span class="s">2 min ago</span></div>
+                    <div class="row2"><span class="t">Government advisory</span><span class="s">18 min ago</span></div>
+                    <div class="row2"><span class="t">Sector ISAC</span><span class="s">31 min ago</span></div>
+                    <div class="row2"><span class="t">Open source / OSINT</span><span class="s">4 min ago</span></div>
+                    <div class="row2"><span class="t">SpearAI derived IOCs</span><span class="s">live</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Threat intelligence — indicators scored, matched against live telemetry, and shown with the hosts they actually touched.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ 3. ENTITY RISK ============ -->
+<section class="band alt" id="risk"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">Entity risk</p>
+    <div class="row">
+      <h2>Risk that points at a name, not a number.</h2>
+      <p class="lede">Every user, host, service account and workload carries a risk score built from its own behavioural baseline and its peer group. The score is never a black box: the contributing signals are listed, weighted and clickable down to the raw event.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Behavioural baselines per entity and per peer group, so “unusual” means unusual for that account, not for the average one.</li>
+      <li>Score movement is explained by its drivers, with the weight each one contributed.</li>
+      <li>Watchlists and risk thresholds feed the agents directly, raising scrutiny before an incident, not after.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/entities/risk</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b class="on">EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>Entity risk</h4>
+            <span class="crumb">14 912 ENTITIES · SCORED HOURLY</span>
+            <span class="sp"></span>
+            <span class="fakesearch">risk:&gt;70 AND type:(user OR service)</span>
+            <span class="pill">Baseline 30d</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Ranked</span><span>Users</span><span>Hosts</span><span>Service accounts</span><span>Workloads</span><span>Watchlist (12)</span></div>
+          <div class="pane">
+            <div class="g5">
+              <div class="kpi"><span class="l">Critical risk</span><span class="n c">9</span><span class="d">≥ 85 score</span></div>
+              <div class="kpi"><span class="l">High risk</span><span class="n h">34</span><span class="d">70 – 84</span></div>
+              <div class="kpi"><span class="l">Elevated</span><span class="n m">212</span><span class="d">50 – 69</span></div>
+              <div class="kpi"><span class="l">Entities scored</span><span class="n b">14 912</span><span class="d">users, hosts, services</span></div>
+              <div class="kpi"><span class="l">New this week</span><span class="n">1 104</span><span class="d">baselining · 7d</span></div>
+            </div>
+
+            <div class="split">
+              <div class="p">
+                <div class="p-h"><span class="p-t">Highest-risk entities</span><span class="tiny">RISK = BEHAVIOUR + EXPOSURE + PRIVILEGE + INTEL</span></div>
+                <div class="tbl-wrap"><table class="tbl">
+                  <thead><tr><th>Entity</th><th>Type</th><th class="num">Risk</th><th>30d trend</th><th>Top driver</th><th>Peer delta</th><th>Owner</th></tr></thead>
+                  <tbody>
+                    <tr><td class="k">a.saleh</td><td>user</td><td class="num" style="color:var(--crit)">94</td><td><svg class="spk up" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,15 9,14 18,13 26,12 34,9 42,8 50,4 62,1"/></svg></td><td>impossible travel + MFA fatigue</td><td>+71</td><td>Finance</td></tr>
+                    <tr><td class="k">svc_backup_prod</td><td>service</td><td class="num" style="color:var(--crit)">91</td><td><svg class="spk up" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,16 10,16 20,15 28,10 36,9 44,5 52,3 62,2"/></svg></td><td>interactive logon, never before seen</td><td>+84</td><td>Platform</td></tr>
+                    <tr><td class="k">fin-ws-0417</td><td>host</td><td class="num" style="color:var(--crit)">88</td><td><svg class="spk up" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,14 9,13 18,14 27,10 36,7 45,6 54,3 62,2"/></svg></td><td>SMB writes to 11 new hosts</td><td>+66</td><td>Finance</td></tr>
+                    <tr><td class="k">j.okonkwo</td><td>user</td><td class="num" style="color:var(--high)">81</td><td><svg class="spk up" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,13 10,12 20,11 30,11 40,8 50,7 62,5"/></svg></td><td>bulk download, 4.2 GB</td><td>+52</td><td>Legal</td></tr>
+                    <tr><td class="k">k8s-prod-node-11</td><td>workload</td><td class="num" style="color:var(--high)">77</td><td><svg class="spk" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,11 10,9 20,12 30,8 40,10 50,7 62,6"/></svg></td><td>egress to new ASN</td><td>+39</td><td>Platform</td></tr>
+                    <tr><td class="k">r.deniz</td><td>user</td><td class="num" style="color:var(--high)">74</td><td><svg class="spk dn" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,5 10,6 20,7 30,9 40,10 50,12 62,13"/></svg></td><td>privilege grant, self-approved</td><td>+31</td><td>IT</td></tr>
+                    <tr><td class="k">vdi-pool-0392</td><td>host</td><td class="num" style="color:var(--med)">68</td><td><svg class="spk" viewBox="0 0 62 18" aria-hidden="true"><polyline points="0,10 10,11 20,9 30,10 40,8 50,9 62,8"/></svg></td><td>LSASS access attempt</td><td>+28</td><td>IT</td></tr>
+                  </tbody>
+                </table></div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">Why a.saleh scores 94</span><span class="sev c">critical</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Impossible travel, 2 geos / 11 min</span><span class="barcell"><span class="bar"><span class="crit" style="width:88%"></span></span><em>+31</em></span></div>
+                    <div class="row2"><span class="t">14 MFA pushes, 1 approved</span><span class="barcell"><span class="bar"><span class="crit" style="width:72%"></span></span><em>+24</em></span></div>
+                    <div class="row2"><span class="t">Session reused from 203.0.113.47</span><span class="barcell"><span class="bar"><span class="high" style="width:60%"></span></span><em>+18</em></span></div>
+                    <div class="row2"><span class="t">Tier-1 finance data access</span><span class="barcell"><span class="bar"><span class="high" style="width:44%"></span></span><em>+13</em></span></div>
+                    <div class="row2"><span class="t">Mailbox rule created</span><span class="barcell"><span class="bar"><span class="med" style="width:26%"></span></span><em>+8</em></span></div>
+                    <p class="tiny" style="margin-top:3px">EVERY DRIVER LINKS TO THE RAW EVENT · PEER GROUP: FINANCE ANALYST (142)</p>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Risk distribution</span></div>
+                  <div class="p-b">
+                    <svg class="chart" viewBox="0 0 320 96" role="img" aria-label="Risk distribution: 13 480 entities score 0 to 29, 1 177 score 30 to 49, 212 score 50 to 69, 34 score 70 to 84, and 9 score 85 or above.">
+                      <line x1="34" y1="72" x2="316" y2="72" stroke="#1F2C3B" stroke-width="1"/>
+                      <rect x="40" y="16" width="44" height="56" rx="2" fill="#2B3C4F"/>
+                      <rect x="96" y="40" width="44" height="32" rx="2" fill="#56A9FF"/>
+                      <rect x="152" y="52" width="44" height="20" rx="2" fill="#F3C544"/>
+                      <rect x="208" y="60" width="44" height="12" rx="2" fill="#FF8C3F"/>
+                      <rect x="264" y="66" width="44" height="6" rx="2" fill="#FF4D5E"/>
+                      <text x="62" y="12" text-anchor="middle" fill="#A4B6CA" font-family="IBM Plex Mono, monospace" font-size="8.5">13 480</text>
+                      <text x="118" y="36" text-anchor="middle" fill="#A4B6CA" font-family="IBM Plex Mono, monospace" font-size="8.5">1 177</text>
+                      <text x="174" y="48" text-anchor="middle" fill="#A4B6CA" font-family="IBM Plex Mono, monospace" font-size="8.5">212</text>
+                      <text x="230" y="56" text-anchor="middle" fill="#A4B6CA" font-family="IBM Plex Mono, monospace" font-size="8.5">34</text>
+                      <text x="286" y="62" text-anchor="middle" fill="#A4B6CA" font-family="IBM Plex Mono, monospace" font-size="8.5">9</text>
+                      <text x="62" y="86" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">0–29</text>
+                      <text x="118" y="86" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">30–49</text>
+                      <text x="174" y="86" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">50–69</text>
+                      <text x="230" y="86" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">70–84</text>
+                      <text x="286" y="86" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">85+</text>
+                      <text x="4" y="22" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">14k</text>
+                      <text x="10" y="75" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">0</text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Entity risk — scores with their drivers shown and weighted, measured against each entity's own baseline and its peer group.</figcaption>
+  </figure>
+</div></section>
+<style>
+.flow .ent{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1}
+.flow .entc{fill:color-mix(in srgb,var(--crit) 11%,var(--surface-2));stroke:color-mix(in srgb,var(--crit) 48%,transparent);stroke-width:1.3}
+.flow .enta{fill:color-mix(in srgb,var(--ai) 9%,var(--surface-2));stroke:color-mix(in srgb,var(--ai) 42%,transparent);stroke-width:1.2}
+.flow .ed-c{stroke:color-mix(in srgb,var(--crit) 65%,transparent);stroke-width:1.7;fill:none}
+.flow .nt2{fill:var(--fg);font-family:var(--display);font-size:12.5px;font-weight:700}
+.flow .crit{fill:var(--crit);font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.07em}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chips span{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line);background:var(--ink-2);border-radius:5px;padding:3px 8px;white-space:nowrap}
+.chips span.on{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 40%,transparent);background:color-mix(in srgb,var(--brand) 10%,transparent)}
+</style>
+
+<!-- ============ 4. MITRE ATT&CK COVERAGE ============ -->
+<section class="band" id="mitre"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">MITRE ATT&amp;CK coverage</p>
+    <div class="row">
+      <h2>Know what you would catch before someone asks you.</h2>
+      <p class="lede">Every detection in SpearX is mapped to the techniques it covers, so coverage is a measured property of your deployment rather than a claim on a slide. The gaps are listed with the telemetry that would close them.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Technique-level coverage computed from the detections and telemetry you actually have connected.</li>
+      <li>Gaps come with the missing log source or rule named, so the next step is concrete.</li>
+      <li>Observed techniques from live incidents overlay the same matrix, showing coverage against what is hitting you.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/coverage/mitre-attack</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b>EN</b><b class="on">MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>ATT&amp;CK coverage</h4>
+            <span class="crumb">ENTERPRISE v16 · 61 TECHNIQUES IN SCOPE</span>
+            <span class="sp"></span>
+            <span class="chips"><span class="on">Detection coverage</span><span>Observed in estate</span><span>Actor overlay</span></span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Matrix</span><span>Gaps (8)</span><span>Detections (412)</span><span>Data sources</span><span>Validation</span></div>
+          <div class="pane">
+            <div class="g4">
+              <div class="kpi"><span class="l">Weighted coverage</span><span class="n o">67%</span><span class="d">(29 + 24 × 0.5) ÷ 61</span></div>
+              <div class="kpi"><span class="l">Full detection</span><span class="n o">29</span><span class="d">rule + telemetry present</span></div>
+              <div class="kpi"><span class="l">Partial</span><span class="n m">24</span><span class="d">telemetry, no tuned rule</span></div>
+              <div class="kpi"><span class="l">No coverage</span><span class="n c">8</span><span class="d">log source missing</span></div>
+            </div>
+
+            <div class="p">
+              <div class="p-h"><span class="p-t">Enterprise matrix · detection coverage by technique</span>
+                <span class="legend">
+                  <span><i style="background:color-mix(in srgb,var(--ok) 34%,var(--surface-2));border-color:color-mix(in srgb,var(--ok) 46%,transparent)"></i>Full</span>
+                  <span><i style="background:color-mix(in srgb,var(--med) 32%,var(--surface-2));border-color:color-mix(in srgb,var(--med) 44%,transparent)"></i>Partial</span>
+                  <span><i style="background:color-mix(in srgb,var(--crit) 28%,var(--surface-2));border-color:color-mix(in srgb,var(--crit) 40%,transparent)"></i>None</span>
+                </span>
+              </div>
+              <div class="p-b" style="overflow-x:auto">
+                <div class="mitre">
+                  <div class="mcol"><div class="mh">Initial Access</div>
+                    <div class="cl f"><b>T1566</b>Phishing</div>
+                    <div class="cl f"><b>T1190</b>Public-facing app</div>
+                    <div class="cl f"><b>T1078</b>Valid accounts</div>
+                    <div class="cl p"><b>T1133</b>External remote svcs</div>
+                    <div class="cl n"><b>T1195</b>Supply chain</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Execution</div>
+                    <div class="cl f"><b>T1059</b>Command &amp; script</div>
+                    <div class="cl f"><b>T1053</b>Scheduled task</div>
+                    <div class="cl f"><b>T1047</b>WMI</div>
+                    <div class="cl p"><b>T1204</b>User execution</div>
+                    <div class="cl p"><b>T1569</b>System services</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Persistence</div>
+                    <div class="cl f"><b>T1547</b>Autostart exec</div>
+                    <div class="cl f"><b>T1136</b>Create account</div>
+                    <div class="cl f"><b>T1543</b>System process</div>
+                    <div class="cl p"><b>T1098</b>Account manipulation</div>
+                    <div class="cl n"><b>T1505</b>Server component</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Priv. Escalation</div>
+                    <div class="cl f"><b>T1548</b>Abuse elevation</div>
+                    <div class="cl p"><b>T1068</b>Exploit for esc.</div>
+                    <div class="cl p"><b>T1134</b>Token manipulation</div>
+                    <div class="cl p"><b>T1574</b>Hijack exec flow</div>
+                    <div class="cl n"><b>T1484</b>Domain policy mod.</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Defense Evasion</div>
+                    <div class="cl f"><b>T1070</b>Indicator removal</div>
+                    <div class="cl f"><b>T1562</b>Impair defenses</div>
+                    <div class="cl f"><b>T1055</b>Process injection</div>
+                    <div class="cl p"><b>T1027</b>Obfuscated files</div>
+                    <div class="cl p"><b>T1218</b>Binary proxy exec</div>
+                    <div class="cl p"><b>T1036</b>Masquerading</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Credential Access</div>
+                    <div class="cl f"><b>T1003</b>OS cred dumping</div>
+                    <div class="cl f"><b>T1110</b>Brute force</div>
+                    <div class="cl p"><b>T1558</b>Kerberos tickets</div>
+                    <div class="cl p"><b>T1555</b>Password stores</div>
+                    <div class="cl n"><b>T1552</b>Unsecured creds</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Discovery</div>
+                    <div class="cl f"><b>T1087</b>Account discovery</div>
+                    <div class="cl f"><b>T1018</b>Remote system disc.</div>
+                    <div class="cl f"><b>T1083</b>File &amp; dir discovery</div>
+                    <div class="cl p"><b>T1046</b>Net service disc.</div>
+                    <div class="cl p"><b>T1482</b>Domain trust disc.</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Lateral Movement</div>
+                    <div class="cl f"><b>T1021</b>Remote services</div>
+                    <div class="cl f"><b>T1570</b>Lateral tool transfer</div>
+                    <div class="cl p"><b>T1550</b>Alt auth material</div>
+                    <div class="cl p"><b>T1210</b>Exploit remote svcs</div>
+                    <div class="cl n"><b>T1534</b>Internal spearphish</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Collection</div>
+                    <div class="cl f"><b>T1005</b>Data from local sys</div>
+                    <div class="cl f"><b>T1560</b>Archive collected</div>
+                    <div class="cl p"><b>T1114</b>Email collection</div>
+                    <div class="cl p"><b>T1119</b>Automated collection</div>
+                    <div class="cl n"><b>T1213</b>Info repositories</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Command &amp; Control</div>
+                    <div class="cl f"><b>T1071</b>App layer protocol</div>
+                    <div class="cl f"><b>T1105</b>Ingress tool transfer</div>
+                    <div class="cl f"><b>T1219</b>Remote access sw</div>
+                    <div class="cl p"><b>T1572</b>Protocol tunneling</div>
+                    <div class="cl p"><b>T1090</b>Proxy</div>
+                    <div class="cl p"><b>T1102</b>Web service</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Exfiltration</div>
+                    <div class="cl f"><b>T1041</b>Exfil over C2</div>
+                    <div class="cl p"><b>T1567</b>Exfil web service</div>
+                    <div class="cl p"><b>T1048</b>Alt protocol</div>
+                    <div class="cl n"><b>T1030</b>Transfer size limits</div>
+                  </div>
+                  <div class="mcol"><div class="mh">Impact</div>
+                    <div class="cl f"><b>T1486</b>Data encrypted</div>
+                    <div class="cl f"><b>T1490</b>Inhibit recovery</div>
+                    <div class="cl f"><b>T1489</b>Service stop</div>
+                    <div class="cl p"><b>T1485</b>Data destruction</div>
+                    <div class="cl n"><b>T1565</b>Data manipulation</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="split">
+              <div class="p"><div class="p-h"><span class="p-t">Open gaps · what closes each one</span><span class="sev c">8 techniques</span></div>
+                <div class="tbl-wrap"><table class="tbl">
+                  <thead><tr><th>Technique</th><th>Tactic</th><th>Missing</th><th>Effort</th><th>Owner</th></tr></thead>
+                  <tbody>
+                    <tr><td class="k">T1195 Supply chain</td><td>Initial Access</td><td>build pipeline + SBOM events</td><td><span class="sev h">high</span></td><td>Platform</td></tr>
+                    <tr><td class="k">T1484 Domain policy mod.</td><td>Priv. Escalation</td><td>DC GPO change auditing</td><td><span class="sev l">low</span></td><td>IT</td></tr>
+                    <tr><td class="k">T1552 Unsecured creds</td><td>Credential Access</td><td>secret scanning on endpoints</td><td><span class="sev m">medium</span></td><td>SecOps</td></tr>
+                    <tr><td class="k">T1534 Internal spearphish</td><td>Lateral Movement</td><td>internal mail flow logs</td><td><span class="sev l">low</span></td><td>Messaging</td></tr>
+                    <tr><td class="k">T1213 Info repositories</td><td>Collection</td><td>wiki + ticketing audit logs</td><td><span class="sev m">medium</span></td><td>IT</td></tr>
+                    <tr><td class="k">T1505 Server component</td><td>Persistence</td><td>web server module integrity</td><td><span class="sev m">medium</span></td><td>Platform</td></tr>
+                    <tr><td class="k">T1030 Transfer size limits</td><td>Exfiltration</td><td>netflow volumetrics</td><td><span class="sev l">low</span></td><td>Network</td></tr>
+                    <tr><td class="k">T1565 Data manipulation</td><td>Impact</td><td>database audit trail</td><td><span class="sev h">high</span></td><td>Data</td></tr>
+                  </tbody>
+                </table></div>
+              </div>
+              <div class="p"><div class="p-h"><span class="p-t">Coverage by tactic</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Defense Evasion</span><span class="barcell"><span class="bar"><span class="ok" style="width:75%"></span></span><em>75%</em></span></div>
+                  <div class="row2"><span class="t">Execution</span><span class="barcell"><span class="bar"><span class="ok" style="width:80%"></span></span><em>80%</em></span></div>
+                  <div class="row2"><span class="t">Command &amp; Control</span><span class="barcell"><span class="bar"><span class="ok" style="width:75%"></span></span><em>75%</em></span></div>
+                  <div class="row2"><span class="t">Initial Access</span><span class="barcell"><span class="bar"><span class="med" style="width:70%"></span></span><em>70%</em></span></div>
+                  <div class="row2"><span class="t">Discovery</span><span class="barcell"><span class="bar"><span class="ok" style="width:80%"></span></span><em>80%</em></span></div>
+                  <div class="row2"><span class="t">Lateral Movement</span><span class="barcell"><span class="bar"><span class="med" style="width:60%"></span></span><em>60%</em></span></div>
+                  <div class="row2"><span class="t">Credential Access</span><span class="barcell"><span class="bar"><span class="med" style="width:60%"></span></span><em>60%</em></span></div>
+                  <div class="row2"><span class="t">Priv. Escalation</span><span class="barcell"><span class="bar"><span class="high" style="width:50%"></span></span><em>50%</em></span></div>
+                  <div class="row2"><span class="t">Exfiltration</span><span class="barcell"><span class="bar"><span class="high" style="width:50%"></span></span><em>50%</em></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>ATT&amp;CK coverage — technique-level detection coverage, with every gap named alongside the telemetry that closes it.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ 5. ANALYSIS CANVAS ============ -->
+<section class="band alt" id="canvas"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow ai">Analysis canvas</p>
+    <div class="row">
+      <h2>The whole investigation on one surface.</h2>
+      <p class="lede">The canvas is the case file. Entities, the path between them, the timeline and every artefact sit together, so an analyst pivots across identity, endpoint, network and cloud without changing tool or losing the thread. SpearAI lays out the first draft of the graph; the analyst edits it.</p>
+    </div>
+    <ul class="feat ai g3" style="gap:11px 28px">
+      <li>Pivot from any node to every related event, with the ATT&amp;CK technique on the edge that connects them.</li>
+      <li>Agent hypotheses are shown with their confidence and the evidence that confirmed or killed them.</li>
+      <li>Export the canvas straight into a case, a report, or a detection rule for what you just found.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/cases/INC-4471/canvas</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b class="on-ai">AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>INC-4471</h4>
+            <span class="crumb">TOKEN REPLAY → LATERAL MOVEMENT → COLLECTION</span>
+            <span class="sp"></span>
+            <span class="pill ai">Graph drafted by SpearAI</span>
+            <span class="sev c">critical</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Canvas</span><span>Timeline</span><span>Evidence (41)</span><span>Hypotheses (5)</span><span>Tasks</span><span>Report</span></div>
+          <div class="pane">
+            <div class="g5">
+              <div class="kpi"><span class="l">Entities</span><span class="n b">11</span><span class="d">2 users · 4 hosts · 5 artefacts</span></div>
+              <div class="kpi"><span class="l">Dwell time</span><span class="n h">33 min</span><span class="d">08:41 → 09:14</span></div>
+              <div class="kpi"><span class="l">Techniques observed</span><span class="n c">6</span><span class="d">all mapped to ATT&amp;CK</span></div>
+              <div class="kpi"><span class="l">Evidence artefacts</span><span class="n">41</span><span class="d">hash-sealed</span></div>
+              <div class="kpi"><span class="l">Hypotheses</span><span class="n a">3 / 5</span><span class="d">confirmed</span></div>
+            </div>
+
+            <div class="p">
+              <div class="p-h"><span class="p-t">Investigation graph · confirmed path in red</span>
+                <span class="chips"><span class="on">Identity</span><span>Endpoint</span><span>Network</span><span>Files</span><span>Cloud</span><span>+ pivot</span></span>
+              </div>
+              <div class="p-b dgm">
+                <svg class="flow" viewBox="0 0 1180 250" role="img" aria-label="Investigation graph: a phishing mail leads to user a.saleh, whose session token is replayed from an external address, giving a logon to host fin-ws-0417, then lateral movement over SMB to fin-ws-0392, use of the svc_backup_prod account, and finally a 4.2 gigabyte read from the finance file share exfiltrated over HTTPS to cdn-sync.example. Supporting artefacts hang below the nodes they were observed on.">
+                  <defs>
+                    <marker id="b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#FF4D5E"/></marker>
+                    <marker id="b2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2B3C4F"/></marker>
+                  </defs>
+
+                  <rect class="entc" x="14" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="26" y="52">MAIL</text>
+                  <text class="nt2" x="26" y="70">Phishing</text>
+                  <text class="ns" x="26" y="86">mail-relay</text>
+                  <text class="nm" x="26" y="100">T1566.002</text>
+
+                  <text class="ne" x="160" y="26" text-anchor="middle">clicked</text>
+                  <line class="ed-c" x1="142" y1="70" x2="176" y2="70" marker-end="url(#b1)"/>
+
+                  <rect class="entc" x="178" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="190" y="52">USER</text>
+                  <text class="nt2" x="190" y="70">a.saleh</text>
+                  <text class="ns" x="190" y="86">Finance · risk 94</text>
+                  <text class="nm" x="190" y="100">T1078</text>
+
+                  <text class="ne" x="324" y="26" text-anchor="middle">token issued</text>
+                  <line class="ed-c" x1="306" y1="70" x2="340" y2="70" marker-end="url(#b1)"/>
+
+                  <rect class="entc" x="342" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="354" y="52">SESSION</text>
+                  <text class="nt2" x="354" y="70">Token replay</text>
+                  <text class="ns" x="354" y="86">203.0.113.47</text>
+                  <text class="nm" x="354" y="100">T1550.001</text>
+
+                  <text class="ne" x="488" y="26" text-anchor="middle">logon</text>
+                  <line class="ed-c" x1="470" y1="70" x2="504" y2="70" marker-end="url(#b1)"/>
+
+                  <rect class="entc" x="506" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="518" y="52">HOST</text>
+                  <text class="nt2" x="518" y="70">fin-ws-0417</text>
+                  <text class="ns" x="518" y="86">first foothold</text>
+                  <text class="nm" x="518" y="100">RISK 88</text>
+
+                  <text class="ne" x="652" y="26" text-anchor="middle">SMB · T1021.002</text>
+                  <line class="ed-c" x1="634" y1="70" x2="668" y2="70" marker-end="url(#b1)"/>
+
+                  <rect class="entc" x="670" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="682" y="52">HOST</text>
+                  <text class="nt2" x="682" y="70">fin-ws-0392</text>
+                  <text class="ns" x="682" y="86">lateral hop</text>
+                  <text class="nm" x="682" y="100">RISK 68</text>
+
+                  <text class="ne" x="816" y="26" text-anchor="middle">cred used</text>
+                  <line class="ed-c" x1="798" y1="70" x2="832" y2="70" marker-end="url(#b1)"/>
+
+                  <rect class="entc" x="834" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="846" y="52">SERVICE</text>
+                  <text class="nt2" x="846" y="70">svc_backup</text>
+                  <text class="ns" x="846" y="86">interactive logon</text>
+                  <text class="nm" x="846" y="100">RISK 91</text>
+
+                  <text class="ne" x="980" y="26" text-anchor="middle">4.2 GB out</text>
+                  <line class="ed-c" x1="962" y1="70" x2="996" y2="70" marker-end="url(#b1)"/>
+
+                  <rect class="entc" x="998" y="34" width="128" height="72" rx="8"/>
+                  <text class="crit" x="1010" y="52">EGRESS</text>
+                  <text class="nt2" x="1010" y="70">cdn-sync</text>
+                  <text class="ns" x="1010" y="86">HTTPS beacon</text>
+                  <text class="nm" x="1010" y="100">T1041</text>
+
+                  <!-- supporting artefacts -->
+                  <line class="ed" x1="242" y1="106" x2="242" y2="152" marker-end="url(#b2)"/>
+                  <rect class="ent" x="178" y="154" width="128" height="58" rx="7"/>
+                  <text class="nm" x="190" y="172">ARTEFACT</text>
+                  <text class="ns" x="190" y="189">14 MFA pushes,</text>
+                  <text class="ns" x="190" y="203">1 approved</text>
+
+                  <line class="ed" x1="570" y1="106" x2="570" y2="152" marker-end="url(#b2)"/>
+                  <rect class="ent" x="506" y="154" width="128" height="58" rx="7"/>
+                  <text class="nm" x="518" y="172">T1003.001</text>
+                  <text class="ns" x="518" y="189">LSASS access,</text>
+                  <text class="ns" x="518" y="203">blocked by EDR</text>
+
+                  <line class="ed" x1="734" y1="106" x2="734" y2="152" marker-end="url(#b2)"/>
+                  <rect class="ent" x="670" y="154" width="128" height="58" rx="7"/>
+                  <text class="nm" x="682" y="172">ARTEFACT</text>
+                  <text class="ns" x="682" y="189">admin$ share,</text>
+                  <text class="ns" x="682" y="203">service created</text>
+
+                  <line class="ed" x1="898" y1="106" x2="898" y2="152" marker-end="url(#b2)"/>
+                  <rect class="ent" x="834" y="154" width="128" height="58" rx="7"/>
+                  <text class="nm" x="846" y="172">T1005</text>
+                  <text class="ns" x="846" y="189">fin-fileshare-01,</text>
+                  <text class="ns" x="846" y="203">1 942 files read</text>
+
+                  <line class="ed" x1="1062" y1="106" x2="1062" y2="152" marker-end="url(#b2)"/>
+                  <rect class="enta" x="998" y="154" width="128" height="58" rx="7"/>
+                  <text class="tag" x="1010" y="172">SPEARAI</text>
+                  <text class="ns" x="1010" y="189">egress blocked</text>
+                  <text class="ns" x="1010" y="203">pending approval</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="g3">
+              <div class="p"><div class="p-h"><span class="p-t">Timeline</span><span class="tiny">33 MIN</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Mail delivered · T1566.002</span><span class="s">08:41</span></div>
+                  <div class="row2"><span class="t">Link opened, token issued</span><span class="s">08:47</span></div>
+                  <div class="row2"><span class="t">Session replayed · 203.0.113.47</span><span class="s">08:52</span></div>
+                  <div class="row2"><span class="t">Logon fin-ws-0417 · T1078</span><span class="s">09:01</span></div>
+                  <div class="row2"><span class="t">LSASS access attempt · T1003</span><span class="s">09:04</span></div>
+                  <div class="row2"><span class="t">SMB to fin-ws-0392 · T1021.002</span><span class="s">09:07</span></div>
+                  <div class="row2"><span class="t">svc_backup_prod logon</span><span class="s">09:09</span></div>
+                  <div class="row2"><span class="t">4.2 GB read · T1005</span><span class="s">09:12</span></div>
+                  <div class="row2"><span class="t">Egress to cdn-sync · T1041</span><span class="s">09:14</span></div>
+                </div>
+              </div>
+              <div class="p"><div class="p-h"><span class="p-t">Agent hypotheses</span><span class="pill ai">SpearAI</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Token replay, not password reuse</span><span class="sev o">0.91 ✓</span></div>
+                  <div class="row2"><span class="t">Second host reached over SMB</span><span class="sev o">0.88 ✓</span></div>
+                  <div class="row2"><span class="t">Backup account used to collect</span><span class="sev o">0.76 ✓</span></div>
+                  <div class="row2"><span class="t">Exfiltration still in progress</span><span class="sev m">0.64 testing</span></div>
+                  <div class="row2"><span class="t">Persistence via scheduled task</span><span class="sev l">0.12 ruled out</span></div>
+                  <p class="tiny" style="margin-top:3px">EACH HYPOTHESIS LINKS TO THE QUERIES THAT TESTED IT</p>
+                </div>
+              </div>
+              <div class="p"><div class="p-h"><span class="p-t">Evidence</span><span class="tiny">41 · HASH-SEALED</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Process tree, 2 hosts</span><span class="s">6 files</span></div>
+                  <div class="row2"><span class="t">Memory capture, fin-ws-0417</span><span class="s">1.4 GB</span></div>
+                  <div class="row2"><span class="t">Mail headers + attachment</span><span class="s">3 files</span></div>
+                  <div class="row2"><span class="t">Netflow, 09:00 – 09:20</span><span class="s">11 files</span></div>
+                  <div class="row2"><span class="t">Entra ID sign-in logs</span><span class="s">8 files</span></div>
+                  <div class="row2"><span class="t">File share access audit</span><span class="s">9 files</span></div>
+                  <div class="row2"><span class="t">Chain of custody</span><span class="sev o">intact</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Analysis canvas — one surface holding the attack path, the timeline, the agents' hypotheses and the sealed evidence behind them.</figcaption>
+  </figure>
+</div></section>
+<style>
+.fun text{font-family:var(--mono);font-size:9.5px}
+.path{display:grid;gap:8px}
+.path .step{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;color:var(--fg-2);
+  background:var(--ink-2);border:1px solid var(--line);border-radius:7px;padding:8px 10px;min-width:0}
+.path .step b{color:var(--fg);font-weight:600}
+.path .step i{color:var(--crit);font-style:normal;font-weight:600}
+.arrow{color:var(--muted)}
+</style>
+
+<!-- ============ 6. VULNERABILITY MANAGEMENT ============ -->
+<section class="band" id="vuln"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">Vulnerability management</p>
+    <div class="row">
+      <h2>Patch what an attacker can actually reach.</h2>
+      <p class="lede">A severity score on its own cannot tell you what to fix first. SpearX narrows every finding by exposure, exploit availability, network reachability and the value of the asset behind it, so the queue your engineers get is short and defensible.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Prioritisation chain you can inspect and tune, with the rule behind every stage shown.</li>
+      <li>Remediation campaigns with owners and SLAs, tracked against the ticketing system you already use.</li>
+      <li>Known-exploited and actively-targeted findings are promoted automatically from the intel module.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/vulnerabilities/prioritised</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b class="on">VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>Vulnerabilities</h4>
+            <span class="crumb">18 420 FINDINGS · 14 912 ASSETS</span>
+            <span class="sp"></span>
+            <span class="fakesearch">reachable:true AND exploit:known AND sla:breached</span>
+            <span class="pill">Last scan 41 min ago</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Prioritised queue</span><span>All findings</span><span>Assets</span><span>Campaigns (6)</span><span>SLA</span><span>Exceptions</span></div>
+          <div class="pane">
+            <div class="g4">
+              <div class="kpi"><span class="l">Open findings</span><span class="n">18 420</span><span class="d">across 14 912 assets</span></div>
+              <div class="kpi"><span class="l">Reachable + exploitable</span><span class="n c">96</span><span class="d">0.5% of all findings</span></div>
+              <div class="kpi"><span class="l">Known exploited</span><span class="n h">418</span><span class="d">promoted from intel</span></div>
+              <div class="kpi"><span class="l">Past SLA</span><span class="n c">23</span><span class="d up">▲ 4 this week</span></div>
+            </div>
+
+            <div class="split">
+              <div class="p">
+                <div class="p-h"><span class="p-t">Prioritised queue · fix these first</span><span class="tiny">RANKED BY REACHABLE RISK, NOT CVSS</span></div>
+                <div class="tbl-wrap"><table class="tbl">
+                  <thead><tr><th>Finding</th><th>Asset</th><th class="num">CVSS</th><th class="num">Exploit</th><th>Reachable</th><th>Exposure</th><th>SLA</th><th>Owner</th></tr></thead>
+                  <tbody>
+                    <tr><td class="k">VLN-2026-0141</td><td>edge-proxy-03</td><td class="num">9.8</td><td class="num">in the wild</td><td><span class="sev c">yes</span></td><td>internet</td><td><span class="sev c">-6d</span></td><td>Platform</td></tr>
+                    <tr><td class="k">VLN-2026-0137</td><td>vpn-gw-01</td><td class="num">9.1</td><td class="num">in the wild</td><td><span class="sev c">yes</span></td><td>internet</td><td><span class="sev c">-3d</span></td><td>Network</td></tr>
+                    <tr><td class="k">VLN-2026-0098</td><td>fin-sql-02</td><td class="num">8.8</td><td class="num">public PoC</td><td><span class="sev c">yes</span></td><td>internal, tier 1</td><td><span class="sev h">2d</span></td><td>Data</td></tr>
+                    <tr><td class="k">VLN-2025-8814</td><td>k8s-prod-node-11</td><td class="num">8.4</td><td class="num">public PoC</td><td><span class="sev h">yes</span></td><td>internal</td><td><span class="sev m">6d</span></td><td>Platform</td></tr>
+                    <tr><td class="k">VLN-2026-0203</td><td>fin-fileshare-01</td><td class="num">7.5</td><td class="num">none</td><td><span class="sev m">partial</span></td><td>internal, tier 1</td><td><span class="sev l">14d</span></td><td>IT</td></tr>
+                    <tr><td class="k">VLN-2025-7712</td><td>vdi-pool (412)</td><td class="num">9.3</td><td class="num">none</td><td><span class="sev l">no</span></td><td>segmented</td><td><span class="sev l">30d</span></td><td>IT</td></tr>
+                    <tr><td class="k">VLN-2025-6604</td><td>lab-bench-08</td><td class="num">9.9</td><td class="num">public PoC</td><td><span class="sev l">no</span></td><td>isolated lab</td><td><span class="sev l">deferred</span></td><td>R&amp;D</td></tr>
+                  </tbody>
+                </table></div>
+                <div class="p-b" style="border-top:1px solid var(--line)"><p class="tiny">THE LAST TWO ROWS SCORE 9.3 AND 9.9 ON CVSS AND STILL RANK LAST. NOTHING CAN REACH THEM.</p></div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">How 18 420 becomes 23</span></div>
+                  <div class="p-b">
+                    <svg class="chart fun" viewBox="0 0 460 206" role="img" aria-label="Prioritisation chain, bar widths on a logarithmic scale: 18 420 open findings narrow to 2 104 on exposed assets, 418 with a known exploit, 96 reachable across the network, and 23 that are past their service level agreement.">
+                      <rect x="20" y="10" width="420" height="30" rx="4" fill="#2B3C4F"/>
+                      <text x="32" y="29" fill="#E9F0F8">18 420 · all open findings</text>
+                      <rect x="20" y="46" width="327" height="30" rx="4" fill="#56A9FF"/>
+                      <text x="32" y="65" fill="#061024">2 104 · on exposed assets</text>
+                      <rect x="20" y="82" width="258" height="30" rx="4" fill="#F3C544"/>
+                      <text x="32" y="101" fill="#061024">418 · known exploit exists</text>
+                      <rect x="20" y="118" width="195" height="30" rx="4" fill="#FF8C3F"/>
+                      <text x="32" y="137" fill="#061024">96 · reachable</text>
+                      <rect x="20" y="154" width="134" height="30" rx="4" fill="#FF4D5E"/>
+                      <text x="32" y="173" fill="#061024">23 · past SLA</text>
+                      <text x="20" y="198" fill="#6E8197" font-size="8.5">BAR WIDTH ON A LOG SCALE · EACH STAGE IS A RULE YOU CAN EDIT</text>
+                    </svg>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Remediation campaigns</span><span class="tiny">6 ACTIVE</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Edge appliance patch wave</span><span class="barcell"><span class="bar"><span class="ok" style="width:86%"></span></span><em>86%</em></span></div>
+                    <div class="row2"><span class="t">Kubernetes node image bump</span><span class="barcell"><span class="bar"><span class="med" style="width:54%"></span></span><em>54%</em></span></div>
+                    <div class="row2"><span class="t">SQL cluster quarterly</span><span class="barcell"><span class="bar"><span class="high" style="width:31%"></span></span><em>31%</em></span></div>
+                    <div class="row2"><span class="t">VDI golden image rebuild</span><span class="barcell"><span class="bar"><span style="width:12%"></span></span><em>12%</em></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Vulnerability management — the prioritisation chain that turns 18 420 findings into a queue of 23, with every filter visible.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ 7. CSPM ============ -->
+<section class="band alt" id="cspm"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">Cloud security posture</p>
+    <div class="row">
+      <h2>Cloud posture, with the path to your data drawn.</h2>
+      <p class="lede">Misconfigurations across AWS, Azure and GCP are mapped to the control that fails and the framework that requires it. SpearX then chains them into the paths that actually reach sensitive data, so a public bucket and an over-permissive role stop being two separate tickets.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>One control library behind every cloud, so posture is comparable across providers instead of per-console.</li>
+      <li>Attack paths chain identity, network and data findings into a single ranked route.</li>
+      <li>Framework evidence is collected continuously, so an audit is an export rather than a project.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/cspm/posture</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b class="on">CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>Cloud posture</h4>
+            <span class="crumb">42 ACCOUNTS · AWS · AZURE · GCP</span>
+            <span class="sp"></span>
+            <span class="chips"><span class="on">All clouds</span><span>AWS (24)</span><span>Azure (12)</span><span>GCP (6)</span></span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Posture</span><span>Findings (1 284)</span><span>Attack paths (7)</span><span>Frameworks</span><span>Drift</span><span>Exceptions</span></div>
+          <div class="pane">
+            <div class="split wide">
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="g4">
+                  <div class="kpi"><span class="l">Critical</span><span class="n c">18</span><span class="d">7 internet-reachable</span></div>
+                  <div class="kpi"><span class="l">High</span><span class="n h">142</span><span class="d dn">▼ 23 this month</span></div>
+                  <div class="kpi"><span class="l">Attack paths to data</span><span class="n c">7</span><span class="d">2 from the internet</span></div>
+                  <div class="kpi"><span class="l">Drift last 24h</span><span class="n m">31</span><span class="d">9 outside change window</span></div>
+                </div>
+
+                <div class="p">
+                  <div class="p-h"><span class="p-t">Findings by control</span><span class="tiny">1 284 OPEN · 42 ACCOUNTS</span></div>
+                  <div class="tbl-wrap"><table class="tbl">
+                    <thead><tr><th>Finding</th><th>Resource</th><th>Account</th><th>Control</th><th>Framework</th><th>Sev</th><th>Age</th></tr></thead>
+                    <tbody>
+                      <tr><td class="k">Bucket readable by any principal</td><td>s3://fin-exports-prd</td><td>aws-prod-finance</td><td>CC6.1 · storage ACL</td><td>SOC 2 · CIS 2.1.5</td><td><span class="sev c">crit</span></td><td>2d</td></tr>
+                      <tr><td class="k">Role trusts external account</td><td>role/deploy-ci</td><td>aws-prod-platform</td><td>IAM least privilege</td><td>CIS 1.16</td><td><span class="sev c">crit</span></td><td>5d</td></tr>
+                      <tr><td class="k">Metadata service v1 enabled</td><td>i-0a44…  (14 hosts)</td><td>aws-prod-platform</td><td>Instance metadata</td><td>CIS 5.6</td><td><span class="sev c">crit</span></td><td>11d</td></tr>
+                      <tr><td class="k">Key vault without purge protection</td><td>kv-fin-secrets</td><td>az-prod-fin</td><td>Secret durability</td><td>ISO A.10.1</td><td><span class="sev h">high</span></td><td>3d</td></tr>
+                      <tr><td class="k">Flow logs disabled</td><td>vpc-0f21e</td><td>aws-prod-data</td><td>Network logging</td><td>CIS 3.9 · PCI 10.2</td><td><span class="sev h">high</span></td><td>8d</td></tr>
+                      <tr><td class="k">Database publicly resolvable</td><td>sql-reporting-02</td><td>az-prod-fin</td><td>Data plane exposure</td><td>PCI 1.3.2</td><td><span class="sev h">high</span></td><td>1d</td></tr>
+                      <tr><td class="k">Service account key never rotated</td><td>sa-bq-loader</td><td>gcp-analytics</td><td>Key rotation 90d</td><td>CIS 1.4</td><td><span class="sev m">med</span></td><td>184d</td></tr>
+                    </tbody>
+                  </table></div>
+                </div>
+
+                <div class="p">
+                  <div class="p-h"><span class="p-t">Attack path 1 of 7 · internet to finance exports</span><span class="sev c">critical</span></div>
+                  <div class="p-b path">
+                    <div class="step"><i>1</i><b>Public ALB</b><span class="arrow">accepts</span>0.0.0.0/0 on 443<span class="arrow">→</span><b>web-prd-04</b></div>
+                    <div class="step"><i>2</i><b>web-prd-04</b><span class="arrow">runs</span>VLN-2026-0141, exploit in the wild<span class="arrow">→</span>code execution</div>
+                    <div class="step"><i>3</i><b>Metadata v1</b><span class="arrow">yields</span>instance credentials<span class="arrow">→</span><b>role/web-prd</b></div>
+                    <div class="step"><i>4</i><b>role/web-prd</b><span class="arrow">holds</span>s3:GetObject on all buckets<span class="arrow">→</span><b>s3://fin-exports-prd</b></div>
+                    <div class="step" style="border-color:color-mix(in srgb,var(--crit) 40%,transparent)"><i>5</i><b>Result</b><span class="arrow">reachable:</span>2.1 TB of finance exports, 4 findings in the chain</div>
+                    <p class="tiny">FIXING STEP 3 ALONE BREAKS THE PATH · SPEARAI RANKS THE CHEAPEST BREAK</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">Posture score</span></div>
+                  <div class="p-b gauge">
+                    <svg viewBox="0 0 92 92" role="img" aria-label="Cloud posture score 72 out of 100.">
+                      <circle class="trk" cx="46" cy="46" r="36"/>
+                      <circle class="val med" cx="46" cy="46" r="36" stroke-dasharray="162.9 226.2" transform="rotate(-90 46 46)"/>
+                      <text class="gt" x="46" y="50">72</text>
+                      <text class="gs" x="46" y="64">POSTURE</text>
+                    </svg>
+                    <div class="rows" style="min-width:0">
+                      <div class="row2"><span class="t">AWS</span><span class="s">76</span></div>
+                      <div class="row2"><span class="t">Azure</span><span class="s">69</span></div>
+                      <div class="row2"><span class="t">GCP</span><span class="s">74</span></div>
+                      <div class="row2"><span class="t">30-day change</span><span class="s" style="color:var(--ok)">+6</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Framework readiness</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">CIS Benchmarks</span><span class="barcell"><span class="bar"><span class="ok" style="width:81%"></span></span><em>81%</em></span></div>
+                    <div class="row2"><span class="t">SOC 2 (CC6 – CC8)</span><span class="barcell"><span class="bar"><span class="ok" style="width:77%"></span></span><em>77%</em></span></div>
+                    <div class="row2"><span class="t">ISO/IEC 27001</span><span class="barcell"><span class="bar"><span class="med" style="width:68%"></span></span><em>68%</em></span></div>
+                    <div class="row2"><span class="t">PCI DSS 4.0</span><span class="barcell"><span class="bar"><span class="med" style="width:64%"></span></span><em>64%</em></span></div>
+                    <div class="row2"><span class="t">NIST CSF 2.0</span><span class="barcell"><span class="bar"><span class="ok" style="width:79%"></span></span><em>79%</em></span></div>
+                    <p class="tiny" style="margin-top:3px">EVIDENCE COLLECTED CONTINUOUSLY · EXPORT PER CONTROL</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Cloud posture — findings tied to the control and framework they break, and chained into the paths that reach real data.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ 8. FIM ============ -->
+<section class="band" id="fim"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">File integrity monitoring</p>
+    <div class="row">
+      <h2>Know the moment a file changes, and who changed it.</h2>
+      <p class="lede">Baselines, hashes and permissions on the paths that matter, with the process and account behind every change. Each change is checked against your approved change windows and tickets, so routine deployment noise separates itself from the one edit nobody authorised.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Before and after hashes with the diff for text and configuration files.</li>
+      <li>Changes correlated against change tickets and maintenance windows, so unauthorised means unauthorised.</li>
+      <li>Baseline drift tracked per path, with one click to re-baseline after an approved release.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/integrity/changes</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b class="on">FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>File integrity</h4>
+            <span class="crumb">2 418 MONITORED PATHS · 14 400 HOSTS</span>
+            <span class="sp"></span>
+            <span class="fakesearch">authorised:false AND path:/etc OR registry:Run</span>
+            <span class="pill live">● Agent coverage 99.2%</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Changes</span><span>Baselines</span><span>Watched paths</span><span>Drift</span><span>Change windows</span><span>Rules</span></div>
+          <div class="pane">
+            <div class="g4">
+              <div class="kpi"><span class="l">Changes, last 24h</span><span class="n">4 912</span><span class="d">across 2 418 paths</span></div>
+              <div class="kpi"><span class="l">Matched to a ticket</span><span class="n o">4 884</span><span class="d">99.4% routine</span></div>
+              <div class="kpi"><span class="l">Unauthorised</span><span class="n c">28</span><span class="d">no ticket, no window</span></div>
+              <div class="kpi"><span class="l">Baseline drift</span><span class="n m">6 paths</span><span class="d">pending re-baseline</span></div>
+            </div>
+
+            <div class="split">
+              <div class="p">
+                <div class="p-h"><span class="p-t">Unauthorised changes</span><span class="tiny">NO MATCHING CHANGE TICKET OR WINDOW</span></div>
+                <div class="tbl-wrap"><table class="tbl">
+                  <thead><tr><th>Path</th><th>Host</th><th>Change</th><th>By process</th><th>Account</th><th>Hash before → after</th><th>Verdict</th></tr></thead>
+                  <tbody>
+                    <tr><td class="k">/etc/ssh/sshd_config</td><td>fin-sql-02</td><td>modified</td><td>vim</td><td>r.deniz</td><td>9c1a… → 44f8…</td><td><span class="sev c">critical</span></td></tr>
+                    <tr><td class="k">HKLM\…\Run\updater</td><td>fin-ws-0417</td><td>created</td><td>powershell.exe</td><td>a.saleh</td><td>— → 7b20…</td><td><span class="sev c">critical</span></td></tr>
+                    <tr><td class="k">/usr/local/bin/sync-agent</td><td>k8s-prod-node-11</td><td>created</td><td>curl</td><td>root</td><td>— → 4f1c…</td><td><span class="sev c">critical</span></td></tr>
+                    <tr><td class="k">C:\Windows\System32\drivers\etc\hosts</td><td>fin-ws-0392</td><td>modified</td><td>notepad.exe</td><td>SYSTEM</td><td>e8d2… → 1a90…</td><td><span class="sev h">high</span></td></tr>
+                    <tr><td class="k">/etc/pam.d/common-auth</td><td>vpn-gw-01</td><td>modified</td><td>sed</td><td>svc_deploy</td><td>b771… → b9c4…</td><td><span class="sev h">high</span></td></tr>
+                    <tr><td class="k">/var/www/app/.htaccess</td><td>web-prd-04</td><td>permissions</td><td>chmod</td><td>www-data</td><td>0644 → 0777</td><td><span class="sev h">high</span></td></tr>
+                    <tr><td class="k">/opt/backup/exclude.list</td><td>bkp-master-01</td><td>deleted</td><td>rm</td><td>svc_backup_prod</td><td>cc03… → —</td><td><span class="sev m">medium</span></td></tr>
+                  </tbody>
+                </table></div>
+                <div class="p-b" style="border-top:1px solid var(--line)"><p class="tiny">ROWS 2, 3 AND 7 WERE PULLED INTO INC-4471 BY THE CORRELATION AGENT AUTOMATICALLY.</p></div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">Change volume, last 24h</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Modified</span><span class="barcell"><span class="bar"><span style="width:78%"></span></span><em>3 834</em></span></div>
+                    <div class="row2"><span class="t">Created</span><span class="barcell"><span class="bar"><span style="width:14%"></span></span><em>688</em></span></div>
+                    <div class="row2"><span class="t">Deleted</span><span class="barcell"><span class="bar"><span class="med" style="width:6%"></span></span><em>294</em></span></div>
+                    <div class="row2"><span class="t">Permissions</span><span class="barcell"><span class="bar"><span class="high" style="width:2%"></span></span><em>96</em></span></div>
+                    <p class="tiny" style="margin-top:3px">TOTAL 4 912 · DEPLOYMENT WINDOWS 02:00 – 04:00 UTC</p>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Critical path watchlist</span><span class="tiny">TIER 1</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">/etc/ssh, /etc/pam.d</span><span class="sev c">1 alert</span></div>
+                    <div class="row2"><span class="t">Registry Run keys</span><span class="sev c">1 alert</span></div>
+                    <div class="row2"><span class="t">Web roots + .htaccess</span><span class="sev h">1 alert</span></div>
+                    <div class="row2"><span class="t">Scheduled task definitions</span><span class="sev o">clean</span></div>
+                    <div class="row2"><span class="t">Kernel modules, /lib/modules</span><span class="sev o">clean</span></div>
+                    <div class="row2"><span class="t">Certificate stores</span><span class="sev o">clean</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>File integrity monitoring — 4 912 changes in a day, 28 that nobody authorised, and three of them already attached to a live incident.</figcaption>
+  </figure>
+</div></section>
+<style>
+:root{--paper:#F5F7FB; --paper-fg:#0E141C; --paper-mut:#5A6575; --paper-line:#D9E0EA}
+.paper{background:var(--paper);color:var(--paper-fg);border-radius:6px;padding:16px 18px;display:grid;gap:10px;min-width:0}
+.paper h5{font-family:var(--display);font-size:15px;font-weight:800;margin:0;letter-spacing:-.01em;color:var(--paper-fg)}
+.paper .meta{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-mut)}
+.paper p{font-size:10.5px;line-height:1.5;color:var(--paper-fg);max-width:60ch}
+.paper hr{border:0;border-top:1px solid var(--paper-line);margin:2px 0}
+.paper .pk{display:grid;gap:5px}
+.paper .pk div{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:10px;font-family:var(--mono);color:var(--paper-fg);
+  border-bottom:1px solid var(--paper-line);padding-bottom:4px}
+.pal{display:grid;gap:5px;align-content:start}
+.pal span{font-family:var(--mono);font-size:9.5px;color:var(--fg-2);background:var(--ink-2);border:1px dashed var(--line-2);
+  border-radius:6px;padding:6px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:grab}
+.pal span.hd{border:0;background:none;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;font-size:9px;padding:6px 0 1px;cursor:default}
+.wgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;min-width:0}
+.wgrid .p{position:relative}
+.wgrid .p::after{content:"⠿";position:absolute;top:7px;right:9px;color:var(--line-2);font-size:11px;line-height:1}
+.span2{grid-column:span 2}
+@media (max-width:860px){.wgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.wgrid{grid-template-columns:minmax(0,1fr)}.span2{grid-column:span 1}}
+.note{border:1px solid var(--line);background:var(--ink-2);border-radius:var(--r);padding:16px 18px;display:grid;gap:7px}
+.note b{font-family:var(--display);font-size:14px;font-weight:700;color:var(--fg)}
+.note p{font-size:13.5px;color:var(--fg-2);max-width:78ch}
+footer{border-top:1px solid var(--line);padding-block:28px}
+</style>
+
+<!-- ============ 9. CQS ANALYSIS ============ -->
+<section class="band alt" id="cqs"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">CQS analysis</p>
+    <div class="row">
+      <h2>One score your board can follow month to month.</h2>
+      <p class="lede">CQS rolls detection coverage, cloud posture, exposure, identity hygiene and response performance into a single trendable number, and then shows exactly which drivers moved it. Every component is traceable back to the module that produced it, so the score survives the question “where does that come from?”.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Six weighted components, each one a live measurement rather than a questionnaire answer.</li>
+      <li>Month-on-month movement attributed to named drivers, with the work that caused the change.</li>
+      <li>Weights are yours to set, so the score reflects the risks your organisation actually cares about.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/analytics/cqs</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b class="on">OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>CQS analysis</h4>
+            <span class="crumb">OCTOBER 2026 · ALL BUSINESS UNITS</span>
+            <span class="sp"></span>
+            <span class="chips"><span class="on">Group</span><span>Finance</span><span>Platform</span><span>Retail</span></span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Overview</span><span>Components</span><span>Drivers</span><span>Weights</span><span>History</span><span>Board pack</span></div>
+          <div class="pane">
+            <div class="split">
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p">
+                  <div class="p-h"><span class="p-t">CQS trend · 6 months</span><span class="tiny">+13 SINCE MAY</span></div>
+                  <div class="p-b">
+                    <svg class="chart" viewBox="0 0 460 180" role="img" aria-label="CQS trend over six months: 61 in May, 64 in June, 63 in July, 68 in August, 71 in September and 74 in October, on a scale from 50 to 80.">
+                      <line x1="40" y1="20" x2="440" y2="20" stroke="#1F2C3B" stroke-width="1"/>
+                      <line x1="40" y1="60" x2="440" y2="60" stroke="#1F2C3B" stroke-width="1"/>
+                      <line x1="40" y1="100" x2="440" y2="100" stroke="#1F2C3B" stroke-width="1"/>
+                      <line x1="40" y1="140" x2="440" y2="140" stroke="#2B3C4F" stroke-width="1"/>
+                      <text x="32" y="23" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">80</text>
+                      <text x="32" y="63" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">70</text>
+                      <text x="32" y="103" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">60</text>
+                      <text x="32" y="143" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">50</text>
+                      <polygon points="40,96 120,84 200,88 280,68 360,56 440,44 440,140 40,140" fill="#5B8CFF" fill-opacity="0.13"/>
+                      <polyline points="40,96 120,84 200,88 280,68 360,56 440,44" fill="none" stroke="#5B8CFF" stroke-width="2.2" stroke-linejoin="round"/>
+                      <circle cx="40" cy="96" r="2.6" fill="#5B8CFF"/>
+                      <circle cx="120" cy="84" r="2.6" fill="#5B8CFF"/>
+                      <circle cx="200" cy="88" r="2.6" fill="#5B8CFF"/>
+                      <circle cx="280" cy="68" r="2.6" fill="#5B8CFF"/>
+                      <circle cx="360" cy="56" r="2.6" fill="#5B8CFF"/>
+                      <circle cx="440" cy="44" r="4.4" fill="#5B8CFF" stroke="#070B11" stroke-width="1.6"/>
+                      <text x="40" y="158" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">MAY 61</text>
+                      <text x="120" y="158" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">JUN 64</text>
+                      <text x="200" y="158" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">JUL 63</text>
+                      <text x="280" y="158" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">AUG 68</text>
+                      <text x="360" y="158" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8.5">SEP 71</text>
+                      <text x="440" y="158" text-anchor="middle" fill="#E9F0F8" font-family="IBM Plex Mono, monospace" font-size="8.5">OCT 74</text>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="p">
+                  <div class="p-h"><span class="p-t">What moved the score this month</span><span class="tiny">+3 NET</span></div>
+                  <div class="tbl-wrap"><table class="tbl">
+                    <thead><tr><th>Driver</th><th>Component</th><th>Source module</th><th class="num">Effect</th><th>Owner</th></tr></thead>
+                    <tbody>
+                      <tr><td class="k">Edge appliance patch wave completed</td><td>Exposure</td><td>Vulnerabilities</td><td class="num" style="color:var(--ok)">+4.1</td><td>Platform</td></tr>
+                      <tr><td class="k">GPO change auditing enabled on DCs</td><td>Detection coverage</td><td>ATT&amp;CK</td><td class="num" style="color:var(--ok)">+2.4</td><td>IT</td></tr>
+                      <tr><td class="k">Flow logs restored on 6 VPCs</td><td>Cloud posture</td><td>CSPM</td><td class="num" style="color:var(--ok)">+1.8</td><td>Network</td></tr>
+                      <tr><td class="k">Mean time to contain improved</td><td>Response</td><td>SpearAI</td><td class="num" style="color:var(--ok)">+1.2</td><td>SecOps</td></tr>
+                      <tr><td class="k">Public bucket introduced in prod</td><td>Cloud posture</td><td>CSPM</td><td class="num" style="color:var(--crit)">−3.6</td><td>Finance</td></tr>
+                      <tr><td class="k">Service account keys past rotation</td><td>Identity hygiene</td><td>Entity risk</td><td class="num" style="color:var(--crit)">−2.9</td><td>Data</td></tr>
+                    </tbody>
+                  </table></div>
+                </div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">CQS · October</span><span class="sev o">+3 MoM</span></div>
+                  <div class="p-b gauge">
+                    <svg viewBox="0 0 92 92" role="img" aria-label="CQS score 74 out of 100.">
+                      <circle class="trk" cx="46" cy="46" r="36"/>
+                      <circle class="val ok" cx="46" cy="46" r="36" stroke-dasharray="167.4 226.2" transform="rotate(-90 46 46)"/>
+                      <text class="gt" x="46" y="50">74</text>
+                      <text class="gs" x="46" y="64">CQS</text>
+                    </svg>
+                    <div class="rows" style="min-width:0">
+                      <div class="row2"><span class="t">Target, Q1</span><span class="s">80</span></div>
+                      <div class="row2"><span class="t">Group floor</span><span class="s">65</span></div>
+                      <div class="row2"><span class="t">Lowest unit</span><span class="s">Retail · 61</span></div>
+                      <div class="row2"><span class="t">Highest unit</span><span class="s">Platform · 81</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Components · weighted</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Detection coverage <span class="tiny">25%</span></span><span class="barcell"><span class="bar"><span class="med" style="width:67%"></span></span><em>67</em></span></div>
+                    <div class="row2"><span class="t">Cloud posture <span class="tiny">20%</span></span><span class="barcell"><span class="bar"><span class="med" style="width:72%"></span></span><em>72</em></span></div>
+                    <div class="row2"><span class="t">Exposure <span class="tiny">20%</span></span><span class="barcell"><span class="bar"><span class="ok" style="width:78%"></span></span><em>78</em></span></div>
+                    <div class="row2"><span class="t">Response <span class="tiny">15%</span></span><span class="barcell"><span class="bar"><span class="ok" style="width:84%"></span></span><em>84</em></span></div>
+                    <div class="row2"><span class="t">Identity hygiene <span class="tiny">10%</span></span><span class="barcell"><span class="bar"><span class="high" style="width:58%"></span></span><em>58</em></span></div>
+                    <div class="row2"><span class="t">Integrity + change <span class="tiny">10%</span></span><span class="barcell"><span class="bar"><span class="ok" style="width:91%"></span></span><em>91</em></span></div>
+                    <p class="tiny" style="margin-top:3px">WEIGHTED TOTAL = 74 · WEIGHTS CONFIGURABLE PER ORGANISATION</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>CQS analysis — one weighted score, six live components, and every month's movement attributed to a named driver.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ 10. CUSTOM DASHBOARDS ============ -->
+<section class="band" id="dash"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow">Custom dashboards</p>
+    <div class="row">
+      <h2>Build the view your team actually runs on.</h2>
+      <p class="lede">Drag any widget from any module onto a shared canvas. A SOC lead, a cloud team and an audit committee need three different pictures of the same data, and none of them should need a ticket to get one.</p>
+    </div>
+    <ul class="feat g3" style="gap:11px 28px">
+      <li>Widgets from every module on one canvas, bound to the same filters and time range.</li>
+      <li>Share with a team, embed in a wiki, or schedule as a snapshot to an inbox.</li>
+      <li>Any widget opens into the module it came from, with your filters carried through.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/dashboards/soc-morning-standup/edit</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b class="on">DS</b><b>RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>SOC morning stand-up</h4>
+            <span class="crumb">EDITING · 9 WIDGETS · SHARED WITH SECOPS (14)</span>
+            <span class="sp"></span>
+            <span class="pill">Last 24h</span>
+            <span class="btn" style="font-size:12px;padding:6px 12px">Schedule</span>
+            <span class="btn pri" style="font-size:12px;padding:6px 12px">Save</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="pane" style="display:grid;grid-template-columns:168px minmax(0,1fr);gap:11px">
+            <div class="p" style="align-self:start">
+              <div class="p-h"><span class="p-t">Widgets</span></div>
+              <div class="p-b pal">
+                <span class="hd">SpearAI</span>
+                <span>Agent run status</span><span>Approval queue</span>
+                <span class="hd">Detection</span>
+                <span>ATT&amp;CK heat</span><span>Open incidents</span><span>Alert volume</span>
+                <span class="hd">Risk</span>
+                <span>Top entities</span><span>Risk distribution</span>
+                <span class="hd">Posture</span>
+                <span>CSPM findings</span><span>Vuln SLA</span><span>FIM changes</span>
+                <span class="hd">Intel</span>
+                <span>IOC matches</span><span>Actor relevance</span>
+              </div>
+            </div>
+
+            <div class="wgrid">
+              <div class="p"><div class="p-h"><span class="p-t">Open incidents</span></div><div class="p-b"><span class="n c" style="font-family:var(--display);font-size:25px;font-weight:800">4</span><p class="tiny">1 CRITICAL · 3 HIGH</p></div></div>
+              <div class="p"><div class="p-h"><span class="p-t">Agent runs, 24h</span></div><div class="p-b"><span class="n a" style="font-family:var(--display);font-size:25px;font-weight:800">1 284</span><p class="tiny">11 ESCALATED TO HUMANS</p></div></div>
+              <div class="p"><div class="p-h"><span class="p-t">Approvals waiting</span></div><div class="p-b"><span class="n m" style="font-family:var(--display);font-size:25px;font-weight:800">1</span><p class="tiny">OLDEST 4 MIN</p></div></div>
+              <div class="p"><div class="p-h"><span class="p-t">Past SLA</span></div><div class="p-b"><span class="n c" style="font-family:var(--display);font-size:25px;font-weight:800">23</span><p class="tiny">VULN · 6 OWNERS</p></div></div>
+
+              <div class="p span2"><div class="p-h"><span class="p-t">Alert volume vs escalations, 12h</span></div>
+                <div class="p-b">
+                  <svg class="chart" viewBox="0 0 440 120" role="img" aria-label="Alert volume by hour over twelve hours, peaking at 1 180 alerts at 09:00, with escalations never exceeding 14.">
+                    <line x1="30" y1="96" x2="434" y2="96" stroke="#2B3C4F" stroke-width="1"/>
+                    <line x1="30" y1="20" x2="434" y2="20" stroke="#1F2C3B" stroke-width="1"/>
+                    <text x="24" y="23" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">1 200</text>
+                    <text x="24" y="99" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">0</text>
+                    <rect x="36" y="58" width="24" height="38" fill="#2B3C4F"/>
+                    <rect x="69" y="64" width="24" height="32" fill="#2B3C4F"/>
+                    <rect x="102" y="52" width="24" height="44" fill="#2B3C4F"/>
+                    <rect x="135" y="44" width="24" height="52" fill="#2B3C4F"/>
+                    <rect x="168" y="36" width="24" height="60" fill="#2B3C4F"/>
+                    <rect x="201" y="21" width="24" height="75" fill="#5B8CFF"/>
+                    <rect x="234" y="40" width="24" height="56" fill="#2B3C4F"/>
+                    <rect x="267" y="48" width="24" height="48" fill="#2B3C4F"/>
+                    <rect x="300" y="56" width="24" height="40" fill="#2B3C4F"/>
+                    <rect x="333" y="62" width="24" height="34" fill="#2B3C4F"/>
+                    <rect x="366" y="68" width="24" height="28" fill="#2B3C4F"/>
+                    <rect x="399" y="72" width="24" height="24" fill="#2B3C4F"/>
+                    <polyline points="48,93 81,94 114,92 147,91 180,90 213,87 246,91 279,92 312,93 345,94 378,94 411,95" fill="none" stroke="#19E0C2" stroke-width="1.8"/>
+                    <text x="213" y="16" text-anchor="middle" fill="#E9F0F8" font-family="IBM Plex Mono, monospace" font-size="8">1 180 at 09:00</text>
+                    <text x="36" y="112" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">04:00</text>
+                    <text x="213" y="112" text-anchor="middle" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">09:00</text>
+                    <text x="423" y="112" text-anchor="end" fill="#6E8197" font-family="IBM Plex Mono, monospace" font-size="8">15:00</text>
+                    <text x="434" y="16" text-anchor="end" fill="#19E0C2" font-family="IBM Plex Mono, monospace" font-size="8">— escalated to a human (max 14)</text>
+                  </svg>
+                </div>
+              </div>
+              <div class="p span2"><div class="p-h"><span class="p-t">Top entities by risk</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">a.saleh · user</span><span class="barcell"><span class="bar"><span class="crit" style="width:94%"></span></span><em>94</em></span></div>
+                  <div class="row2"><span class="t">svc_backup_prod · service</span><span class="barcell"><span class="bar"><span class="crit" style="width:91%"></span></span><em>91</em></span></div>
+                  <div class="row2"><span class="t">fin-ws-0417 · host</span><span class="barcell"><span class="bar"><span class="crit" style="width:88%"></span></span><em>88</em></span></div>
+                  <div class="row2"><span class="t">j.okonkwo · user</span><span class="barcell"><span class="bar"><span class="high" style="width:81%"></span></span><em>81</em></span></div>
+                  <div class="row2"><span class="t">k8s-prod-node-11 · workload</span><span class="barcell"><span class="bar"><span class="high" style="width:77%"></span></span><em>77</em></span></div>
+                </div>
+              </div>
+
+              <div class="p span2"><div class="p-h"><span class="p-t">IOC matches by feed</span></div>
+                <div class="p-b rows">
+                  <div class="row2"><span class="t">Commercial feed A</span><span class="barcell"><span class="bar"><span class="crit" style="width:46%"></span></span><em>17</em></span></div>
+                  <div class="row2"><span class="t">Sector ISAC</span><span class="barcell"><span class="bar"><span class="high" style="width:30%"></span></span><em>11</em></span></div>
+                  <div class="row2"><span class="t">SpearAI derived</span><span class="barcell"><span class="bar"><span class="ai" style="width:16%"></span></span><em>6</em></span></div>
+                  <div class="row2"><span class="t">OSINT</span><span class="barcell"><span class="bar"><span style="width:8%"></span></span><em>3</em></span></div>
+                  <p class="tiny" style="margin-top:3px">37 TOTAL · CLICK ANY ROW TO OPEN THREAT INTEL</p>
+                </div>
+              </div>
+              <div class="p span2"><div class="p-h"><span class="p-t">ATT&amp;CK heat · observed this week</span></div>
+                <div class="p-b" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px">
+                  <div class="cl f"><b>T1566</b>Phishing</div>
+                  <div class="cl f"><b>T1078</b>Valid accts</div>
+                  <div class="cl f"><b>T1550</b>Alt auth</div>
+                  <div class="cl p"><b>T1003</b>Cred dump</div>
+                  <div class="cl f"><b>T1021</b>Remote svcs</div>
+                  <div class="cl f"><b>T1005</b>Local data</div>
+                  <div class="cl f"><b>T1041</b>Exfil C2</div>
+                  <div class="cl p"><b>T1053</b>Sched task</div>
+                  <div class="cl f"><b>T1059</b>Cmd script</div>
+                  <div class="cl n"><b>T1195</b>Supply chain</div>
+                  <div class="cl f"><b>T1105</b>Tool transfer</div>
+                  <div class="cl p"><b>T1036</b>Masquerade</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Custom dashboards — widgets dragged from any module onto one canvas, every tile still linked back to its source.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ 11. REPORTS ============ -->
+<section class="band alt" id="reports"><div class="wrap">
+  <div class="mod">
+    <p class="eyebrow ai">Reporting</p>
+    <div class="row">
+      <h2>The report writes itself from the evidence.</h2>
+      <p class="lede">Reports are generated from the same evidence store the agents wrote to, so the executive summary, the technique list and the remediation table all reconcile with the case they came from. Pick the audience, pick the period, and the document is ready with its figures already sourced.</p>
+    </div>
+    <ul class="feat ai g3" style="gap:11px 28px">
+      <li>Executive, technical and audit templates drawn from one data set, so versions cannot drift apart.</li>
+      <li>Every figure in the document links back to the query and artefacts that produced it.</li>
+      <li>Scheduled distribution per audience, with classification and retention applied automatically.</li>
+    </ul>
+  </div>
+
+  <figure class="shot">
+    <div class="win">
+      <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span>
+        <span class="win-url">app.spearx.io/reports/monthly-executive/preview</span>
+        <span class="demo-chip">Demo data</span></div>
+      <div class="app">
+        <nav class="rail" aria-hidden="true">
+          <span class="lg2"><svg viewBox="0 0 24 24"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/></svg></span>
+          <b>AI</b><b>OV</b><b>TI</b><b>EN</b><b>MT</b><b>VM</b><b>CS</b><b>FM</b><b>DS</b><b class="on">RP</b>
+        </nav>
+        <div class="main">
+          <div class="appbar">
+            <h4>Monthly executive report</h4>
+            <span class="crumb">OCTOBER 2026 · DRAFT · GENERATED BY SPEARAI</span>
+            <span class="sp"></span>
+            <span class="pill ai">41 sources cited</span>
+            <span class="btn" style="font-size:12px;padding:6px 12px">Export</span>
+            <span class="btn pri" style="font-size:12px;padding:6px 12px">Send to board</span>
+            <span class="ava">MK</span>
+          </div>
+          <div class="tabs"><span class="on">Preview</span><span>Sections (8)</span><span>Sources (41)</span><span>Templates</span><span>Schedule</span><span>History</span></div>
+          <div class="pane">
+            <div class="split">
+              <div class="p">
+                <div class="p-h"><span class="p-t">Document preview · page 1 of 14</span><span class="tiny">CONFIDENTIAL</span></div>
+                <div class="p-b">
+                  <div class="paper">
+                    <p class="meta">Monthly security report · October 2026 · Confidential</p>
+                    <h5>Security posture and incident summary</h5>
+                    <hr>
+                    <p><strong>Summary.</strong> CQS closed the month at 74, up 3 points. One critical incident (INC-4471) was detected, contained within 33 minutes of first signal and closed with no confirmed data loss. Exposure improved after the edge appliance patch wave; cloud posture fell back on the introduction of a publicly readable storage bucket in the finance production account, now remediated.</p>
+                    <p><strong>What changed.</strong> Detection coverage rose to 67% of techniques in scope after domain policy auditing was enabled. Eight techniques remain without coverage, each with a named owner and a dated plan in section 5.</p>
+                    <div class="pk">
+                      <div><span>CQS, month end</span><span>74 (+3)</span></div>
+                      <div><span>Critical incidents</span><span>1</span></div>
+                      <div><span>Time to contain, INC-4471</span><span>33 min</span></div>
+                      <div><span>Findings past SLA</span><span>23</span></div>
+                      <div><span>Unauthorised file changes</span><span>28</span></div>
+                      <div><span>ATT&amp;CK coverage</span><span>67%</span></div>
+                    </div>
+                    <p class="meta">Every figure above links to its source query · prepared for the board audit committee</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;gap:11px;min-width:0">
+                <div class="p"><div class="p-h"><span class="p-t">Sections</span><span class="tiny">8 · AUTO-FILLED</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">1 · Executive summary</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">2 · Incidents this period</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">3 · CQS and drivers</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">4 · Exposure and patching</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">5 · Coverage gaps and plan</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">6 · Cloud posture</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">7 · Integrity and change</span><span class="sev o">ready</span></div>
+                    <div class="row2"><span class="t">8 · Appendix · evidence</span><span class="sev m">review</span></div>
+                  </div>
+                </div>
+                <div class="p"><div class="p-h"><span class="p-t">Scheduled distribution</span></div>
+                  <div class="p-b rows">
+                    <div class="row2"><span class="t">Board audit committee</span><span class="s">monthly · 1st</span></div>
+                    <div class="row2"><span class="t">CISO weekly digest</span><span class="s">Mondays 07:00</span></div>
+                    <div class="row2"><span class="t">Cloud team posture</span><span class="s">daily 06:00</span></div>
+                    <div class="row2"><span class="t">Audit evidence pack</span><span class="s">quarterly</span></div>
+                    <div class="row2"><span class="t">Retention</span><span class="s">7 years</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <figcaption>Reporting — an executive document generated from the same evidence the agents used, with every figure traceable to its query.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ CLOSE ============ -->
+<section class="band" id="demo"><div class="wrap" style="display:grid;gap:22px">
+  <p class="eyebrow">See it on your own data</p>
+  <h2 style="max-width:26ch">Bring one week of your telemetry. Watch the agents work it.</h2>
+  <p class="lede">A guided walkthrough runs on your environment, not a sandbox: we connect a sample of your telemetry, run the agent canvas against it live, and leave you with the coverage map, the prioritised queue and the first report it produced.</p>
+  <div class="cta-row">
+    <a class="btn pri lg" href="#demo">Book a walkthrough</a>
+    <a class="btn lg" href="#agents">Replay the agent canvas</a>
+  </div>
+  <div class="note">
+    <b>About these screens</b>
+    <p>Every interface on this page is an illustrative build of the SpearX product populated with synthetic demo data. Host names, accounts, indicators, findings and scores are invented for demonstration. External addresses use the IETF documentation ranges reserved for examples (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24) and never route anywhere. MITRE ATT&amp;CK tactic and technique identifiers are real and published by MITRE; the coverage values shown against them are not.</p>
+  </div>
+</div></section>
+
+<footer><div class="wrap" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
+  <span class="mark"><span class="glyph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L19 9 L12 22 L5 9 Z" fill="#06121f"/><path d="M12 7 L15.5 10.5 L12 17 L8.5 10.5 Z" fill="#9fd8ff"/></svg></span>SpearX</span>
+  <p class="tiny">SPEARX PLATFORM · SPEARAI AGENTS · ILLUSTRATIVE INTERFACES, SYNTHETIC DATA</p>
+</div></footer>
